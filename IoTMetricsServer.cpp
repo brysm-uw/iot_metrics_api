@@ -40,7 +40,7 @@ IoTMetricsServer::~IoTMetricsServer() {
 //==============================================================================
 
 void IoTMetricsServer::initializeMetrics() {
-    std::cout << "🔧 Initializing Custom OpenTelemetry metrics system..." << std::endl;
+    std::cout << "Initializing Custom OpenTelemetry metrics system..." << std::endl;
 
     // Note: We're keeping the OpenTelemetry setup for compatibility but using custom export
     // Create Prometheus exporter with options (for potential future use)
