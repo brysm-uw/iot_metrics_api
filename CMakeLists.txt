@@ -1,5 +1,4 @@
-﻿# CMakeLists.txt - Fixed runtime library linking
-cmake_minimum_required(VERSION 3.15)
+﻿cmake_minimum_required(VERSION 3.15)
 project(iot-metrics-api VERSION 1.0.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -43,19 +42,19 @@ FetchContent_MakeAvailable(opentelemetry-cpp)
 add_executable(iot-metrics-api
     main.cpp IoTMetricsServer.cpp IoTMetricsServer.h)
 
-# FIXED: Link ALL the required OpenTelemetry libraries
+# Link ALL the required OpenTelemetry libraries
 target_link_libraries(iot-metrics-api PRIVATE
     # OpenTelemetry API
     opentelemetry_api
     
-    # OpenTelemetry SDK components (REQUIRED for your code)
+    # OpenTelemetry SDK components
     opentelemetry_sdk
     opentelemetry_common
     opentelemetry_resources
     opentelemetry_metrics
     opentelemetry_version
     
-    # Prometheus exporter (REQUIRED for your code)
+    # Prometheus exporter
     opentelemetry_exporter_prometheus
     
     # HTTP and JSON
@@ -74,12 +73,12 @@ target_compile_definitions(iot-metrics-api PRIVATE
 if(MSVC)
     target_compile_options(iot-metrics-api PRIVATE /W3 /utf-8)
     
-    # FIXED: Use dynamic runtime library to match OpenTelemetry
+    # Use dynamic runtime library to match OpenTelemetry
     set_property(TARGET iot-metrics-api PROPERTY
         MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
     
-    # Alternative: If you prefer to set this globally for all targets
+    # to set this globally for all targets
     # set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreadedDLL$<$<CONFIG:Debug>:Debug>")
 endif()
 
-message(STATUS "🎉 IoT Metrics API configured with full OpenTelemetry + Prometheus support")
+message(STATUS "IoT Metrics API configured with full OpenTelemetry + Prometheus support")
