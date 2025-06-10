@@ -45,7 +45,7 @@ void IoTMetricsServer::initializeMetrics() {
     // Note: We're keeping the OpenTelemetry setup for compatibility but using custom export
     // Create Prometheus exporter with options (for potential future use)
     opentelemetry::exporter::metrics::PrometheusExporterOptions options;
-    options.url = "localhost:" + std::to_string(metrics_port_);
+    options.url = "<your-server-ip>:" + std::to_string(metrics_port_);
 
     // Create the Prometheus exporter using factory
     auto prometheus_exporter = opentelemetry::exporter::metrics::PrometheusExporterFactory::Create(options);
@@ -68,8 +68,8 @@ void IoTMetricsServer::initializeMetrics() {
     meter_provider_ = provider;
 
     std::cout << "Global MeterProvider set" << std::endl;
-    std::cout << "Custom Prometheus metrics available at: http://localhost:" << port_ << "/metrics" << std::endl;
-    std::cout << "Standard Prometheus metrics also available at: http://localhost:" << metrics_port_ << "/metrics" << std::endl;
+    std::cout << "Custom Prometheus metrics available at: http://<your-server-ip>:" << port_ << "/metrics" << std::endl;
+    std::cout << "Standard Prometheus metrics also available at: http://<your-server-ip>:" << metrics_port_ << "/metrics" << std::endl;
     std::cout << "Supported OpenTelemetry instruments: Counter, UpDownCounter, Histogram, Gauge" << std::endl;
 }
 
@@ -116,8 +116,8 @@ void IoTMetricsServer::setupRoutes() {
     http_server_->Get("/metrics/info", [this](const httplib::Request& req, httplib::Response& res) {
         json response;
         response["message"] = "Custom Prometheus metrics available at /metrics";
-        response["metrics_url"] = "http://localhost:" + std::to_string(port_) + "/metrics";
-        response["standard_metrics_url"] = "http://localhost:" + std::to_string(metrics_port_) + "/metrics";
+        response["metrics_url"] = "http://<your-server-ip>:" + std::to_string(port_) + "/metrics";
+        response["standard_metrics_url"] = "http://<your-server-ip>:" + std::to_string(metrics_port_) + "/metrics";
         response["opentelemetry_instruments"] = {
             "counter", "updowncounter", "histogram"
         };
@@ -136,26 +136,26 @@ bool IoTMetricsServer::start() {
     }
 
     std::cout << "Starting OpenTelemetry-compliant IoT Metrics API server..." << std::endl;
-    std::cout << "API server: http://localhost:" << port_ << std::endl;
-    std::cout << "Custom Prometheus metrics: http://localhost:" << port_ << "/metrics" << std::endl;
-    std::cout << "Standard Prometheus metrics: http://localhost:" << metrics_port_ << "/metrics" << std::endl;
-    std::cout << "Health check: http://localhost:" << port_ << "/health" << std::endl;
-    std::cout << "Instruments list: http://localhost:" << port_ << "/api/metrics/list" << std::endl;
+    std::cout << "API server: http://<your-server-ip>:" << port_ << std::endl;
+    std::cout << "Custom Prometheus metrics: http://<your-server-ip>:" << port_ << "/metrics" << std::endl;
+    std::cout << "Standard Prometheus metrics: http://<your-server-ip>:" << metrics_port_ << "/metrics" << std::endl;
+    std::cout << "Health check: http://<your-server-ip>:" << port_ << "/health" << std::endl;
+    std::cout << "Instruments list: http://<your-server-ip>:" << port_ << "/api/metrics/list" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "OpenTelemetry Synchronous Instruments Examples:" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "Counter (monotonic - only increases):" << std::endl;
-    std::cout << "curl -X POST http://localhost:" << port_ << "/api/metrics \\" << std::endl;
+    std::cout << "curl -X POST http://<your-server-ip>:" << port_ << "/api/metrics \\" << std::endl;
     std::cout << "  -H \"Content-Type: application/json\" \\" << std::endl;
     std::cout << "  -d '{\"metric_name\":\"http_requests_total\",\"instrument_type\":\"counter\",\"value\":1,\"attributes\":{\"method\":\"GET\",\"status\":\"200\"}}'" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "# UpDownCounter (accumulates, can increase/decrease):" << std::endl;
-    std::cout << "curl -X POST http://localhost:" << port_ << "/api/metrics \\" << std::endl;
+    std::cout << "curl -X POST http://<your-server-ip>:" << port_ << "/api/metrics \\" << std::endl;
     std::cout << "  -H \"Content-Type: application/json\" \\" << std::endl;
     std::cout << "  -d '{\"metric_name\":\"queue_length\",\"instrument_type\":\"updowncounter\",\"value\":5,\"unit\":\"items\",\"attributes\":{\"queue\":\"processing\"}}'" << std::endl;
     std::cout << "" << std::endl;
     std::cout << "# Histogram (value distribution):" << std::endl;
-    std::cout << "curl -X POST http://localhost:" << port_ << "/api/metrics \\" << std::endl;
+    std::cout << "curl -X POST http://<your-server-ip>:" << port_ << "/api/metrics \\" << std::endl;
     std::cout << "  -H \"Content-Type: application/json\" \\" << std::endl;
     std::cout << "  -d '{\"metric_name\":\"response_time\",\"instrument_type\":\"histogram\",\"value\":0.234,\"unit\":\"s\",\"attributes\":{\"endpoint\":\"/api/data\"}}'" << std::endl;
     std::cout << "" << std::endl;
@@ -255,7 +255,7 @@ void IoTMetricsServer::handleHealth(const httplib::Request& req, httplib::Respon
     response["opentelemetry"] = "enabled";
     response["supported_instruments"] = { "counter", "updowncounter", "histogram" };
     response["metrics_port"] = metrics_port_;
-    response["custom_metrics_endpoint"] = "http://localhost:" + std::to_string(port_) + "/metrics";
+    response["custom_metrics_endpoint"] = "http://<your-server-ip>:" + std::to_string(port_) + "/metrics";
     response["timestamp"] = std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch()).count();
 
@@ -269,8 +269,8 @@ void IoTMetricsServer::handleStatus(const httplib::Request& req, httplib::Respon
     response["status"] = "running";
     response["api_port"] = port_;
     response["metrics_port"] = metrics_port_;
-    response["custom_metrics_endpoint"] = "http://localhost:" + std::to_string(port_) + "/metrics";
-    response["standard_metrics_endpoint"] = "http://localhost:" + std::to_string(metrics_port_) + "/metrics";
+    response["custom_metrics_endpoint"] = "http://<your-server-ip>:" + std::to_string(port_) + "/metrics";
+    response["standard_metrics_endpoint"] = "http://<your-server-ip>:" + std::to_string(metrics_port_) + "/metrics";
     response["opentelemetry"] = {
         {"meter_provider", "active"},
         {"prometheus_exporter", "active"},
@@ -382,7 +382,7 @@ std::string IoTMetricsServer::formatPrometheusMetrics() {
 
     // Add server info as comments
     output << "# OpenTelemetry IoT Metrics API - Custom Export\n";
-    output << "# Server: http://localhost:" << port_ << "\n";
+    output << "# Server: http://<your-server-ip>:" << port_ << "\n";
     output << "# Generated: " << std::chrono::duration_cast<std::chrono::seconds>(
         std::chrono::system_clock::now().time_since_epoch()).count() << "\n\n";
 
