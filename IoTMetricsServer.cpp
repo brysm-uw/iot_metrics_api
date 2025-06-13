@@ -301,59 +301,103 @@ void IoTMetricsServer::handleMetricsList(const httplib::Request& req, httplib::R
     std::lock_guard<std::mutex> lock(instruments_mutex_);
 
     json response;
-    response["total_instruments"] = counter_metrics_.size() + updowncounter_metrics_.size() + histogram_metrics_.size();
     response["opentelemetry_standard"] = true;
 
     json instruments_list;
 
+    auto now = std::chrono::duration_cast<std::chrono::seconds>(
+        std::chrono::system_clock::now().time_since_epoch()).count();
+
+    // Helper lambda to extract value from SumPointData
+    auto extract_sum_value = [](const metrics_sdk::MetricData* metric_data) -> double {
+        if (metric_data && !metric_data->point_data_attr_.empty()) {
+            const auto& point_data_attr = metric_data->point_data_attr_.front();
+            const auto* sum_point = std::get_if<metrics_sdk::SumPointData>(&point_data_attr.point_data);
+            if (sum_point) {
+                double val = 0.0;
+                std::visit([&val](const auto& v) { val = static_cast<double>(v); }, sum_point->value_);
+                return val;
+            }
+        }
+        return 0.0;
+        };
+
+    // Helper lambda for histogram
+    auto extract_histogram = [](const metrics_sdk::MetricData* metric_data, json& j) {
+        if (metric_data && !metric_data->point_data_attr_.empty()) {
+            const auto& point_data_attr = metric_data->point_data_attr_.front();
+            const auto* hist_point = std::get_if<metrics_sdk::HistogramPointData>(&point_data_attr.point_data);
+            if (hist_point) {
+                double sum = 0.0;
+                std::visit([&sum](const auto& v) { sum = static_cast<double>(v); }, hist_point->sum_);
+                j["value"] = sum;
+                j["count"] = hist_point->count_;
+            }
+        }
+        };
+
     // List Counters
     for (const auto& [name, metric_data_ptr] : counter_metrics_) {
-        if (metric_data_ptr) {  // Check if pointer is valid
-            instruments_list[name] = {
+        if (metric_data_ptr) {
+            json j = {
                 {"instrument_type", "counter"},
                 {"description", metric_data_ptr->instrument_descriptor.description_},
                 {"unit", metric_data_ptr->instrument_descriptor.unit_},
-                {"semantic", "monotonically_increasing"}
+                {"semantic", "monotonically_increasing"},
+                {"timestamp", now},
+                {"value", extract_sum_value(metric_data_ptr.get())}
             };
+            instruments_list[name] = j;
         }
     }
 
     // List UpDownCounters
     for (const auto& [name, metric_data_ptr] : updowncounter_metrics_) {
-        if (metric_data_ptr) {  // Check if pointer is valid
-            instruments_list[name] = {
+        if (metric_data_ptr) {
+            json j = {
                 {"instrument_type", "updowncounter"},
                 {"description", metric_data_ptr->instrument_descriptor.description_},
                 {"unit", metric_data_ptr->instrument_descriptor.unit_},
-                {"semantic", "accumulates_can_increase_decrease"}
+                {"semantic", "accumulates_can_increase_decrease"},
+                {"timestamp", now},
+                {"value", extract_sum_value(metric_data_ptr.get())}
             };
+            instruments_list[name] = j;
         }
     }
 
     // List Histograms
     for (const auto& [name, metric_data_ptr] : histogram_metrics_) {
-        if (metric_data_ptr) {  // Check if pointer is valid
-            instruments_list[name] = {
+        if (metric_data_ptr) {
+            json j = {
                 {"instrument_type", "histogram"},
                 {"description", metric_data_ptr->instrument_descriptor.description_},
                 {"unit", metric_data_ptr->instrument_descriptor.unit_},
-                {"semantic", "value_distribution"}
+                {"semantic", "value_distribution"},
+                {"timestamp", now}
             };
+            extract_histogram(metric_data_ptr.get(), j);
+            instruments_list[name] = j;
         }
     }
 
     // List Gauges
     for (const auto& [name, metric_data_ptr] : gauge_metrics_) {
         if (metric_data_ptr) {
-            instruments_list[name] = {
+            json j = {
                 {"instrument_type", "gauge"},
                 {"description", metric_data_ptr->instrument_descriptor.description_},
                 {"unit", metric_data_ptr->instrument_descriptor.unit_},
-                {"semantic", "absolute_value"}
+                {"semantic", "absolute_value"},
+                {"timestamp", now},
+                {"value", extract_sum_value(metric_data_ptr.get())}
             };
+            instruments_list[name] = j;
         }
     }
+
     response["instruments"] = instruments_list;
+    response["total_instruments"] = instruments_list.size();
     res.set_content(response.dump(2), "application/json");
 }
 
