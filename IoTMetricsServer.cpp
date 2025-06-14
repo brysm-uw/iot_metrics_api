@@ -21,6 +21,11 @@ namespace metrics_sdk = opentelemetry::sdk::metrics;
 // CONSTRUCTOR & DESTRUCTOR
 //==============================================================================
 
+/**
+ * @brief Constructs a new IoTMetricsServer object.
+ * @param port The port for the main API server.
+ * @param metrics_port The port for the Prometheus metrics endpoint.
+ */
 IoTMetricsServer::IoTMetricsServer(int port, int metrics_port)
     : port_(port)
     , metrics_port_(metrics_port)
@@ -31,6 +36,9 @@ IoTMetricsServer::IoTMetricsServer(int port, int metrics_port)
     setupRoutes();
 }
 
+/**
+ * @brief Destructor for IoTMetricsServer. Stops the server if running.
+ */
 IoTMetricsServer::~IoTMetricsServer() {
     stop();
 }
@@ -39,6 +47,9 @@ IoTMetricsServer::~IoTMetricsServer() {
 // INITIALIZATION METHODS
 //==============================================================================
 
+/**
+ * @brief Initializes the OpenTelemetry metrics system and Prometheus exporter.
+ */
 void IoTMetricsServer::initializeMetrics() {
     std::cout << "Initializing Custom OpenTelemetry metrics system..." << std::endl;
 
@@ -73,6 +84,9 @@ void IoTMetricsServer::initializeMetrics() {
     std::cout << "Supported OpenTelemetry instruments: Counter, UpDownCounter, Histogram, Gauge" << std::endl;
 }
 
+/**
+ * @brief Sets up all HTTP routes and endpoints for the server.
+ */
 void IoTMetricsServer::setupRoutes() {
     // CORS headers for web clients
     http_server_->set_pre_routing_handler([](const httplib::Request& req, httplib::Response& res) {
@@ -80,37 +94,37 @@ void IoTMetricsServer::setupRoutes() {
         res.set_header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         res.set_header("Access-Control-Allow-Headers", "Content-Type, Authorization");
         return httplib::Server::HandlerResponse::Unhandled;
-        });
+    });
 
     // Handle preflight OPTIONS requests
     http_server_->Options(".*", [](const httplib::Request&, httplib::Response& res) {
         return;
-        });
+    });
 
     // OpenTelemetry-compliant metric submission endpoint
     http_server_->Post("/api/metrics", [this](const httplib::Request& req, httplib::Response& res) {
         handleMetric(req, res);
-        });
+    });
 
     // Health check endpoint
     http_server_->Get("/health", [this](const httplib::Request& req, httplib::Response& res) {
         handleHealth(req, res);
-        });
+    });
 
     // Status endpoint
     http_server_->Get("/api/status", [this](const httplib::Request& req, httplib::Response& res) {
         handleStatus(req, res);
-        });
+    });
 
     // List registered metrics
     http_server_->Get("/api/metrics/list", [this](const httplib::Request& req, httplib::Response& res) {
         handleMetricsList(req, res);
-        });
+    });
 
     // CUSTOM PROMETHEUS METRICS ENDPOINT
     http_server_->Get("/metrics", [this](const httplib::Request& req, httplib::Response& res) {
         handlePrometheusMetrics(req, res);
-        });
+    });
 
     // Metrics endpoint info (for reference)
     http_server_->Get("/metrics/info", [this](const httplib::Request& req, httplib::Response& res) {
@@ -122,13 +136,17 @@ void IoTMetricsServer::setupRoutes() {
             "counter", "updowncounter", "histogram"
         };
         res.set_content(response.dump(2), "application/json");
-        });
+    });
 }
 
 //==============================================================================
 // SERVER LIFECYCLE METHODS
 //==============================================================================
 
+/**
+ * @brief Starts the HTTP server (blocking call).
+ * @return true if the server started successfully, false otherwise.
+ */
 bool IoTMetricsServer::start() {
     if (server_running_) {
         std::cout << "Server is already running" << std::endl;
@@ -169,6 +187,9 @@ bool IoTMetricsServer::start() {
     return success;
 }
 
+/**
+ * @brief Stops the HTTP server if running.
+ */
 void IoTMetricsServer::stop() {
     if (server_running_) {
         std::cout << "Stopping OpenTelemetry IoT Metrics API server..." << std::endl;
@@ -181,6 +202,11 @@ void IoTMetricsServer::stop() {
 // HTTP ENDPOINT HANDLERS
 //==============================================================================
 
+/**
+ * @brief Handles metric submission requests to /api/metrics.
+ * @param req The HTTP request.
+ * @param res The HTTP response.
+ */
 void IoTMetricsServer::handleMetric(const httplib::Request& req, httplib::Response& res) {
     try {
         // Parse JSON body
@@ -247,6 +273,11 @@ void IoTMetricsServer::handleMetric(const httplib::Request& req, httplib::Respon
     }
 }
 
+/**
+ * @brief Handles health check requests to /health.
+ * @param req The HTTP request.
+ * @param res The HTTP response.
+ */
 void IoTMetricsServer::handleHealth(const httplib::Request& req, httplib::Response& res) {
     json response;
     response["status"] = "healthy";
@@ -262,6 +293,11 @@ void IoTMetricsServer::handleHealth(const httplib::Request& req, httplib::Respon
     res.set_content(response.dump(2), "application/json");
 }
 
+/**
+ * @brief Handles status requests to /api/status.
+ * @param req The HTTP request.
+ * @param res The HTTP response.
+ */
 void IoTMetricsServer::handleStatus(const httplib::Request& req, httplib::Response& res) {
     std::lock_guard<std::mutex> lock(instruments_mutex_);
 
@@ -297,6 +333,11 @@ void IoTMetricsServer::handleStatus(const httplib::Request& req, httplib::Respon
     res.set_content(response.dump(2), "application/json");
 }
 
+/**
+ * @brief Handles requests to list all registered metrics at /api/metrics/list.
+ * @param req The HTTP request.
+ * @param res The HTTP response.
+ */
 void IoTMetricsServer::handleMetricsList(const httplib::Request& req, httplib::Response& res) {
     std::lock_guard<std::mutex> lock(instruments_mutex_);
 
@@ -320,7 +361,7 @@ void IoTMetricsServer::handleMetricsList(const httplib::Request& req, httplib::R
             }
         }
         return 0.0;
-        };
+    };
 
     // Helper lambda for histogram
     auto extract_histogram = [](const metrics_sdk::MetricData* metric_data, json& j) {
@@ -334,7 +375,7 @@ void IoTMetricsServer::handleMetricsList(const httplib::Request& req, httplib::R
                 j["count"] = hist_point->count_;
             }
         }
-        };
+    };
 
     // List Counters
     for (const auto& [name, metric_data_ptr] : counter_metrics_) {
@@ -405,6 +446,11 @@ void IoTMetricsServer::handleMetricsList(const httplib::Request& req, httplib::R
 // CUSTOM PROMETHEUS EXPORT METHODS
 //==============================================================================
 
+/**
+ * @brief Handles requests to the custom Prometheus metrics endpoint (/metrics).
+ * @param req The HTTP request.
+ * @param res The HTTP response.
+ */
 void IoTMetricsServer::handlePrometheusMetrics(const httplib::Request& req, httplib::Response& res) {
     try {
         std::string prometheus_output = formatPrometheusMetrics();
@@ -419,6 +465,10 @@ void IoTMetricsServer::handlePrometheusMetrics(const httplib::Request& req, http
     }
 }
 
+/**
+ * @brief Formats all metrics for Prometheus exposition.
+ * @return Formatted Prometheus metrics as a string.
+ */
 std::string IoTMetricsServer::formatPrometheusMetrics() {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -460,6 +510,12 @@ std::string IoTMetricsServer::formatPrometheusMetrics() {
     return output.str();
 }
 
+/**
+ * @brief Formats a Counter metric for Prometheus.
+ * @param name Metric name.
+ * @param metric_data Metric data.
+ * @return Prometheus-formatted string.
+ */
 std::string IoTMetricsServer::formatCounterForPrometheus(const std::string& name,
     const metrics_sdk::MetricData& metric_data) {
 
@@ -484,7 +540,7 @@ std::string IoTMetricsServer::formatCounterForPrometheus(const std::string& name
             std::string value_str;
             std::visit([&value_str](const auto& v) {
                 value_str = std::to_string(v);
-                }, sum_point->value_);
+            }, sum_point->value_);
 
             output << sanitized_name << attributes_str << " " << value_str << "\n";
         }
@@ -494,6 +550,12 @@ std::string IoTMetricsServer::formatCounterForPrometheus(const std::string& name
     return output.str();
 }
 
+/**
+ * @brief Formats an UpDownCounter metric for Prometheus.
+ * @param name Metric name.
+ * @param metric_data Metric data.
+ * @return Prometheus-formatted string.
+ */
 std::string IoTMetricsServer::formatUpDownCounterForPrometheus(const std::string& name,
     const metrics_sdk::MetricData& metric_data) {
 
@@ -518,7 +580,7 @@ std::string IoTMetricsServer::formatUpDownCounterForPrometheus(const std::string
             std::string value_str;
             std::visit([&value_str](const auto& v) {
                 value_str = std::to_string(v);
-                }, sum_point->value_);
+            }, sum_point->value_);
 
             output << sanitized_name << attributes_str << " " << value_str << "\n";
         }
@@ -528,6 +590,12 @@ std::string IoTMetricsServer::formatUpDownCounterForPrometheus(const std::string
     return output.str();
 }
 
+/**
+ * @brief Formats a Histogram metric for Prometheus.
+ * @param name Metric name.
+ * @param metric_data Metric data.
+ * @return Prometheus-formatted string.
+ */
 std::string IoTMetricsServer::formatHistogramForPrometheus(const std::string& name,
     const metrics_sdk::MetricData& metric_data) {
 
@@ -578,7 +646,7 @@ std::string IoTMetricsServer::formatHistogramForPrometheus(const std::string& na
             std::string sum_str;
             std::visit([&sum_str](const auto& v) {
                 sum_str = std::to_string(v);
-                }, hist_point->sum_);
+            }, hist_point->sum_);
 
             output << sanitized_name << "_sum" << attributes_str << " " << sum_str << "\n";
         }
@@ -587,6 +655,13 @@ std::string IoTMetricsServer::formatHistogramForPrometheus(const std::string& na
     output << "\n";
     return output.str();
 }
+
+/**
+ * @brief Formats a Gauge metric for Prometheus.
+ * @param name Metric name.
+ * @param metric_data Metric data.
+ * @return Prometheus-formatted string.
+ */
 std::string IoTMetricsServer::formatGaugeForPrometheus(const std::string& name,
     const metrics_sdk::MetricData& metric_data) {
 
@@ -611,7 +686,7 @@ std::string IoTMetricsServer::formatGaugeForPrometheus(const std::string& name,
             std::string value_str;
             std::visit([&value_str](const auto& v) {
                 value_str = std::to_string(v);
-                }, sum_point->value_);
+            }, sum_point->value_);
 
             output << sanitized_name << attributes_str << " " << value_str << "\n";
         }
@@ -620,6 +695,12 @@ std::string IoTMetricsServer::formatGaugeForPrometheus(const std::string& name,
     output << "\n";
     return output.str();
 }
+
+/**
+ * @brief Formats metric attributes for Prometheus.
+ * @param attributes Point attributes.
+ * @return Prometheus-formatted attribute string.
+ */
 std::string IoTMetricsServer::formatAttributes(const metrics_sdk::PointAttributes& attributes) {
     if (attributes.empty()) {
         return "";
@@ -666,10 +747,9 @@ std::string IoTMetricsServer::formatAttributes(const metrics_sdk::PointAttribute
                 value_str = std::to_string(v);
             }
             else {
-                // For any unknown types, just use a placeholder
                 value_str = "unknown_type";
             }
-            }, value);
+        }, value);
 
         output << key << "=\"" << value_str << "\"";
         first = false;
@@ -679,6 +759,11 @@ std::string IoTMetricsServer::formatAttributes(const metrics_sdk::PointAttribute
     return output.str();
 }
 
+/**
+ * @brief Sanitizes a metric name for Prometheus compatibility.
+ * @param name Metric name.
+ * @return Sanitized metric name.
+ */
 std::string IoTMetricsServer::sanitizeMetricName(const std::string& name) {
     std::string sanitized = name;
 
@@ -696,6 +781,15 @@ std::string IoTMetricsServer::sanitizeMetricName(const std::string& name) {
 // METRIC RECORDING METHODS - USING UNIQUE_PTR STORAGE
 //==============================================================================
 
+/**
+ * @brief Records a metric of any supported type.
+ * @param metric_name Name of the metric.
+ * @param instrument_type Type of instrument ("counter", "updowncounter", "histogram", "gauge").
+ * @param value Value to record.
+ * @param attributes Key-value attributes for the metric.
+ * @param unit Unit of measurement.
+ * @param description Metric description.
+ */
 void IoTMetricsServer::recordMetric(const std::string& metric_name,
     const std::string& instrument_type,
     double value,
@@ -735,6 +829,14 @@ void IoTMetricsServer::recordMetric(const std::string& metric_name,
     }
 }
 
+/**
+ * @brief Records a Counter metric.
+ * @param name Metric name.
+ * @param value Value to record.
+ * @param attributes Key-value attributes.
+ * @param unit Unit of measurement.
+ * @param description Metric description.
+ */
 void IoTMetricsServer::recordCounterMetricData(const std::string& name, double value, const std::map<std::string, std::string>& attributes, const std::string& unit, const std::string& description) {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
 
@@ -770,6 +872,14 @@ void IoTMetricsServer::recordCounterMetricData(const std::string& name, double v
     std::cout << "Counter PointDataAttributes created with " << attributes.size() << " attributes in PointAttributes" << std::endl;
 }
 
+/**
+ * @brief Records an UpDownCounter metric.
+ * @param name Metric name.
+ * @param value Value to record.
+ * @param attributes Key-value attributes.
+ * @param unit Unit of measurement.
+ * @param description Metric description.
+ */
 void IoTMetricsServer::recordUpDownCounterMetricData(const std::string& name, double value, const std::map<std::string, std::string>& attributes, const std::string& unit, const std::string& description) {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     std::string attr_key = createAttributeKey(attributes);
@@ -810,6 +920,14 @@ void IoTMetricsServer::recordUpDownCounterMetricData(const std::string& name, do
         << " (current=" << current_value << ")" << std::endl;
 }
 
+/**
+ * @brief Records a Histogram metric.
+ * @param name Metric name.
+ * @param value Value to record.
+ * @param attributes Key-value attributes.
+ * @param unit Unit of measurement.
+ * @param description Metric description.
+ */
 void IoTMetricsServer::recordHistogramMetricData(const std::string& name, double value, const std::map<std::string, std::string>& attributes, const std::string& unit, const std::string& description) {
     std::lock_guard<std::mutex> lock(metrics_mutex_);
     std::string attr_key = createAttributeKey(attributes);
@@ -876,6 +994,14 @@ void IoTMetricsServer::recordHistogramMetricData(const std::string& name, double
         << ", bucket=" << bucket_index << ")" << std::endl;
 }
 
+/**
+ * @brief Records a Gauge metric.
+ * @param name Metric name.
+ * @param value Value to record.
+ * @param attributes Key-value attributes.
+ * @param unit Unit of measurement.
+ * @param description Metric description.
+ */
 void IoTMetricsServer::recordGaugeMetricData(const std::string& name, double value,
     const std::map<std::string, std::string>& attributes, const std::string& unit,
     const std::string& description) {
@@ -917,6 +1043,11 @@ void IoTMetricsServer::recordGaugeMetricData(const std::string& name, double val
 // HELPER METHODS
 //==============================================================================
 
+/**
+ * @brief Creates a unique key from metric attributes for storage.
+ * @param attributes Key-value attributes.
+ * @return Concatenated attribute key.
+ */
 std::string IoTMetricsServer::createAttributeKey(const std::map<std::string, std::string>& attributes) {
     if (attributes.empty()) {
         return "__default__";
@@ -929,6 +1060,12 @@ std::string IoTMetricsServer::createAttributeKey(const std::map<std::string, std
     return key;
 }
 
+/**
+ * @brief Finds the appropriate histogram bucket index for a value.
+ * @param value Value to bucket.
+ * @param boundaries Histogram bucket boundaries.
+ * @return Index of the bucket.
+ */
 size_t IoTMetricsServer::findBucketIndex(double value, const std::vector<double>& boundaries) {
     for (size_t i = 0; i < boundaries.size(); ++i) {
         if (value <= boundaries[i]) {
@@ -939,6 +1076,11 @@ size_t IoTMetricsServer::findBucketIndex(double value, const std::vector<double>
     return boundaries.size();
 }
 
+/**
+ * @brief Calculates cumulative counts for histogram buckets.
+ * @param bucket_counts Per-bucket counts.
+ * @return Cumulative counts vector.
+ */
 std::vector<uint64_t> IoTMetricsServer::calculateCumulativeCounts(const std::vector<uint64_t>& bucket_counts) {
     std::vector<uint64_t> cumulative_counts;
     cumulative_counts.reserve(bucket_counts.size());
@@ -956,6 +1098,12 @@ std::vector<uint64_t> IoTMetricsServer::calculateCumulativeCounts(const std::vec
 // UTILITY METHODS
 //==============================================================================
 
+/**
+ * @brief Validates a metric submission request.
+ * @param request JSON request object.
+ * @param error_msg Output error message if invalid.
+ * @return true if valid, false otherwise.
+ */
 bool IoTMetricsServer::validateMetricRequest(const nlohmann::json& request, std::string& error_msg) {
     // Check required fields
     if (!request.contains("metric_name")) {
@@ -1006,6 +1154,12 @@ bool IoTMetricsServer::validateMetricRequest(const nlohmann::json& request, std:
     return true;
 }
 
+/**
+ * @brief Creates a JSON error response.
+ * @param error Error message.
+ * @param code HTTP error code (default: 400).
+ * @return JSON error response.
+ */
 nlohmann::json IoTMetricsServer::createErrorResponse(const std::string& error, int code) {
     json response;
     response["success"] = false;
@@ -1017,6 +1171,11 @@ nlohmann::json IoTMetricsServer::createErrorResponse(const std::string& error, i
     return response;
 }
 
+/**
+ * @brief Creates a JSON success response.
+ * @param message Success message.
+ * @return JSON success response.
+ */
 nlohmann::json IoTMetricsServer::createSuccessResponse(const std::string& message) {
     json response;
     response["success"] = true;
