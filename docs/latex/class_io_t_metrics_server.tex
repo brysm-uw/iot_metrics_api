@@ -1,0 +1,837 @@
+\doxysection{Io\+TMetrics\+Server Class Reference}
+\hypertarget{class_io_t_metrics_server}{}\label{class_io_t_metrics_server}\index{IoTMetricsServer@{IoTMetricsServer}}
+
+
+Namespace aliases for Open\+Telemetry metrics API and SDK.  
+
+
+
+
+{\ttfamily \#include $<$Io\+TMetrics\+Server.\+h$>$}
+
+\doxysubsubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state}{Histogram\+State}}
+\begin{DoxyCompactList}\small\item\em Tracks the state of a histogram for a given metric and attribute set. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{class_io_t_metrics_server_aada48453e7ea44fbac9df4559a7ef0fc}{Io\+TMetrics\+Server}} (int port=8080, int metrics\+\_\+port=9090)
+\begin{DoxyCompactList}\small\item\em Construct a new \doxylink{class_io_t_metrics_server}{Io\+TMetrics\+Server}. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{class_io_t_metrics_server_a848dcdc7b2e4644a5a9f50465e10d857}{\texorpdfstring{$\sim$}{\string~}\+Io\+TMetrics\+Server}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. Stops the server if running. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_io_t_metrics_server_a3e85b2021867f498981adf34162f1c5b}{start}} ()
+\begin{DoxyCompactList}\small\item\em Start the HTTP server (blocking call). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a52a17a26d4b07219f79f62e5426ddc1f}{stop}} ()
+\begin{DoxyCompactList}\small\item\em Stop the HTTP server if running. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a8be8e1f100d79b46479e48092d8eb1d6}{handle\+Prometheus\+Metrics}} (const httplib\+::\+Request \&req, httplib\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em Handle the /metrics endpoint for custom Prometheus export. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a1e6806e5f080d67ff04ce4f6c729cb5b}{format\+Prometheus\+Metrics}} ()
+\begin{DoxyCompactList}\small\item\em Format all metrics for Prometheus exposition. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a8df6002e7c1a55a60f2940dcdd15137a}{format\+Counter\+For\+Prometheus}} (const std\+::string \&name, const metrics\+\_\+sdk\+::\+Metric\+Data \&metric\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Format a Counter metric for Prometheus. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a1c1f701db249dd732d1b911b786b84db}{format\+Up\+Down\+Counter\+For\+Prometheus}} (const std\+::string \&name, const metrics\+\_\+sdk\+::\+Metric\+Data \&metric\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Format an Up\+Down\+Counter metric for Prometheus. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a75c738003d751d3ae24e60b561cd184a}{format\+Histogram\+For\+Prometheus}} (const std\+::string \&name, const metrics\+\_\+sdk\+::\+Metric\+Data \&metric\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Format a Histogram metric for Prometheus. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_aed472c93711850c9bb3ef26384f015b2}{format\+Gauge\+For\+Prometheus}} (const std\+::string \&name, const metrics\+\_\+sdk\+::\+Metric\+Data \&metric\+\_\+data)
+\begin{DoxyCompactList}\small\item\em Format a Gauge metric for Prometheus. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a62901f052fd050a768e442f8197034cb}{format\+Attributes}} (const metrics\+\_\+sdk\+::\+Point\+Attributes \&attributes)
+\begin{DoxyCompactList}\small\item\em Format metric attributes for Prometheus. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a97d9cb5b77602abf4c0fbf7eb4c7061a}{sanitize\+Metric\+Name}} (const std\+::string \&name)
+\begin{DoxyCompactList}\small\item\em Sanitize a metric name for Prometheus compatibility. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_afcc3abd7f6593a4dd5ced8e5d9c0ecef}{initialize\+Metrics}} ()
+\begin{DoxyCompactList}\small\item\em Initialize Open\+Telemetry metrics and exporters. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a200f79ff0c805c7b336badc812d6ea7f}{setup\+Routes}} ()
+\begin{DoxyCompactList}\small\item\em Set up HTTP routes and endpoints. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a44d00a83874de8e8ce90b73f682fa3ba}{handle\+Metric}} (const httplib\+::\+Request \&req, httplib\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em Handle metric submission endpoint (/api/metrics). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_ab7f7f6ca5a846272cdb0757db68bb823}{handle\+Health}} (const httplib\+::\+Request \&req, httplib\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em Handle health check endpoint (/health). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_ae42fdc76641698d08287a5690e524698}{handle\+Status}} (const httplib\+::\+Request \&req, httplib\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em Handle status endpoint (/api/status). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a190b7738f01c86adf254722b4221881f}{handle\+Metrics\+List}} (const httplib\+::\+Request \&req, httplib\+::\+Response \&res)
+\begin{DoxyCompactList}\small\item\em Handle metrics list endpoint (/api/metrics/list). \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_ac8b9c8f9fa3a63fe9ca2641e3495896f}{record\+Metric}} (const std\+::string \&metric\+\_\+name, const std\+::string \&instrument\+\_\+type, double value, const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes, const std\+::string \&unit, const std\+::string \&description)
+\begin{DoxyCompactList}\small\item\em Record a metric of any supported type. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_af41f9d99f24d8fc999f454e8ffaaeae8}{record\+Counter\+Metric\+Data}} (const std\+::string \&name, double value, const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes, const std\+::string \&unit, const std\+::string \&description)
+\begin{DoxyCompactList}\small\item\em Record a Counter metric. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a1023db6273b3ce2a5c20b4a800df1da4}{record\+Up\+Down\+Counter\+Metric\+Data}} (const std\+::string \&name, double value, const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes, const std\+::string \&unit, const std\+::string \&description)
+\begin{DoxyCompactList}\small\item\em Record an Up\+Down\+Counter metric. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a5e5ae2c82eeb2d328738826b98f18202}{record\+Histogram\+Metric\+Data}} (const std\+::string \&name, double value, const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes, const std\+::string \&unit, const std\+::string \&description)
+\begin{DoxyCompactList}\small\item\em Record a Histogram metric. \end{DoxyCompactList}\item 
+void \mbox{\hyperlink{class_io_t_metrics_server_a5f27a29f494ea61e1f2be5237de81d1c}{record\+Gauge\+Metric\+Data}} (const std\+::string \&name, double value, const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes, const std\+::string \&unit, const std\+::string \&description)
+\begin{DoxyCompactList}\small\item\em Record a Gauge metric. \end{DoxyCompactList}\item 
+std\+::string \mbox{\hyperlink{class_io_t_metrics_server_a42e9622377be69bc292afc55171ef02d}{create\+Attribute\+Key}} (const std\+::map$<$ std\+::string, std\+::string $>$ \&attributes)
+\begin{DoxyCompactList}\small\item\em Create a unique key from metric attributes for storage. \end{DoxyCompactList}\item 
+size\+\_\+t \mbox{\hyperlink{class_io_t_metrics_server_ac6f0f43054f51f796194ecf71d757ba2}{find\+Bucket\+Index}} (double value, const std\+::vector$<$ double $>$ \&boundaries)
+\begin{DoxyCompactList}\small\item\em Find the appropriate histogram bucket index for a value. \end{DoxyCompactList}\item 
+std\+::vector$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{class_io_t_metrics_server_ab4601c1fb35f78ae7579c47ffcddd96e}{calculate\+Cumulative\+Counts}} (const std\+::vector$<$ uint64\+\_\+t $>$ \&bucket\+\_\+counts)
+\begin{DoxyCompactList}\small\item\em Calculate cumulative counts for histogram buckets. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_io_t_metrics_server_a07f1d6e88d4ca77632d3b990d815d1cc}{validate\+Metric\+Request}} (const nlohmann\+::json \&request, std\+::string \&error\+\_\+msg)
+\begin{DoxyCompactList}\small\item\em Validate a metric submission request. \end{DoxyCompactList}\item 
+nlohmann\+::json \mbox{\hyperlink{class_io_t_metrics_server_a4d089ec1ba158dc4b56ea76d6be22fb0}{create\+Error\+Response}} (const std\+::string \&error, int code=400)
+\begin{DoxyCompactList}\small\item\em Create a JSON error response. \end{DoxyCompactList}\item 
+nlohmann\+::json \mbox{\hyperlink{class_io_t_metrics_server_a6592f1807c069f649a0a248f10eb6158}{create\+Success\+Response}} (const std\+::string \&message)
+\begin{DoxyCompactList}\small\item\em Create a JSON success response. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Private Attributes}
+\begin{DoxyCompactItemize}
+\item 
+int \mbox{\hyperlink{class_io_t_metrics_server_a35bc2acc9b94618d2359155eb65edf09}{port\+\_\+}}
+\begin{DoxyCompactList}\small\item\em API server port. \end{DoxyCompactList}\item 
+int \mbox{\hyperlink{class_io_t_metrics_server_ab619bdbccea0982ef17707b6c4246b11}{metrics\+\_\+port\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Prometheus metrics endpoint port. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{class_io_t_metrics_server_aa94f806a102a5188264236b53eb300ec}{server\+\_\+running\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Indicates if the server is running. \end{DoxyCompactList}\item 
+std\+::unique\+\_\+ptr$<$ httplib\+::\+Server $>$ \mbox{\hyperlink{class_io_t_metrics_server_a253bb9a1f2988cf6966b8268eb0c3431}{http\+\_\+server\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Pointer to the HTTP server instance. \end{DoxyCompactList}\item 
+std\+::shared\+\_\+ptr$<$ metrics\+\_\+api\+::\+Meter\+Provider $>$ \mbox{\hyperlink{class_io_t_metrics_server_a3084a23bb8eea1d36333500e71774e7a}{meter\+\_\+provider\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Open\+Telemetry Meter\+Provider. \end{DoxyCompactList}\item 
+const std\+::vector$<$ double $>$ \mbox{\hyperlink{class_io_t_metrics_server_a806399578111863c2f7960788a4e94c5}{default\+\_\+histogram\+\_\+boundaries\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Default histogram bucket boundaries (Open\+Telemetry spec). \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ metrics\+\_\+sdk\+::\+Metric\+Data $>$ $>$ \mbox{\hyperlink{class_io_t_metrics_server_a78e2269bb12e9d92098759018c885dcc}{counter\+\_\+metrics\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Storage for Counter metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ metrics\+\_\+sdk\+::\+Metric\+Data $>$ $>$ \mbox{\hyperlink{class_io_t_metrics_server_a794d913394d3c453fea037986d2fe6e5}{updowncounter\+\_\+metrics\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Storage for Up\+Down\+Counter metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ metrics\+\_\+sdk\+::\+Metric\+Data $>$ $>$ \mbox{\hyperlink{class_io_t_metrics_server_a4c16de232df3d5ce7ad3a373ac1e8666}{histogram\+\_\+metrics\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Storage for Histogram metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, std\+::unique\+\_\+ptr$<$ metrics\+\_\+sdk\+::\+Metric\+Data $>$ $>$ \mbox{\hyperlink{class_io_t_metrics_server_a391aad1a4d1fca283d330ab81de683f4}{gauge\+\_\+metrics\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Storage for Gauge metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). \end{DoxyCompactList}\item 
+std\+::map$<$ std\+::string, std\+::map$<$ std\+::string, \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state}{Histogram\+State}} $>$ $>$ \mbox{\hyperlink{class_io_t_metrics_server_a7011700c4c0d209fb31c4f66bbdb9ff0}{histogram\+\_\+states\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Histogram state tracking (metric\+\_\+name -\/\texorpdfstring{$>$}{>} attribute\+\_\+key -\/\texorpdfstring{$>$}{>} state). \end{DoxyCompactList}\item 
+std\+::mutex \mbox{\hyperlink{class_io_t_metrics_server_a53de8b538916659653c44b9ec9893561}{metrics\+\_\+mutex\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Mutex for protecting metric data. \end{DoxyCompactList}\item 
+std\+::mutex \mbox{\hyperlink{class_io_t_metrics_server_ac9957b1e69a964344a616396e76a7f42}{instruments\+\_\+mutex\+\_\+}}
+\begin{DoxyCompactList}\small\item\em Mutex for protecting instrument registration. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Namespace aliases for Open\+Telemetry metrics API and SDK. 
+
+\doxylink{class_io_t_metrics_server}{Io\+TMetrics\+Server} provides an HTTP API for ingesting and exporting Open\+Telemetry metrics.
+
+This server supports Counter, Up\+Down\+Counter, Histogram, and Gauge instruments, and exposes Prometheus-\/compatible endpoints. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{class_io_t_metrics_server_aada48453e7ea44fbac9df4559a7ef0fc}\index{IoTMetricsServer@{IoTMetricsServer}!IoTMetricsServer@{IoTMetricsServer}}
+\index{IoTMetricsServer@{IoTMetricsServer}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{IoTMetricsServer()}{IoTMetricsServer()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_aada48453e7ea44fbac9df4559a7ef0fc} 
+Io\+TMetrics\+Server\+::\+Io\+TMetrics\+Server (\begin{DoxyParamCaption}\item[{int}]{port}{ = {\ttfamily 8080}, }\item[{int}]{metrics\+\_\+port}{ = {\ttfamily 9090}}\end{DoxyParamCaption})}
+
+
+
+Construct a new \doxylink{class_io_t_metrics_server}{Io\+TMetrics\+Server}. 
+
+Constructs a new \doxylink{class_io_t_metrics_server}{Io\+TMetrics\+Server} object.
+
+
+\begin{DoxyParams}{Parameters}
+{\em port} & The port for the main API server (default\+: 8080). \\
+\hline
+{\em metrics\+\_\+port} & The port for the Prometheus metrics endpoint (default\+: 9090).\\
+\hline
+{\em port} & The port for the main API server. \\
+\hline
+{\em metrics\+\_\+port} & The port for the Prometheus metrics endpoint. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a848dcdc7b2e4644a5a9f50465e10d857}\index{IoTMetricsServer@{IoTMetricsServer}!````~IoTMetricsServer@{\texorpdfstring{$\sim$}{\string~}IoTMetricsServer}}
+\index{````~IoTMetricsServer@{\texorpdfstring{$\sim$}{\string~}IoTMetricsServer}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{\texorpdfstring{$\sim$}{\string~}IoTMetricsServer()}{\string~IoTMetricsServer()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a848dcdc7b2e4644a5a9f50465e10d857} 
+Io\+TMetrics\+Server\+::\texorpdfstring{$\sim$}{\string~}\+Io\+TMetrics\+Server (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Destructor. Stops the server if running. 
+
+Destructor for \doxylink{class_io_t_metrics_server}{Io\+TMetrics\+Server}. Stops the server if running. 
+
+\doxysubsection{Member Function Documentation}
+\Hypertarget{class_io_t_metrics_server_ab4601c1fb35f78ae7579c47ffcddd96e}\index{IoTMetricsServer@{IoTMetricsServer}!calculateCumulativeCounts@{calculateCumulativeCounts}}
+\index{calculateCumulativeCounts@{calculateCumulativeCounts}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{calculateCumulativeCounts()}{calculateCumulativeCounts()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ab4601c1fb35f78ae7579c47ffcddd96e} 
+std\+::vector$<$ uint64\+\_\+t $>$ Io\+TMetrics\+Server\+::calculate\+Cumulative\+Counts (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ uint64\+\_\+t $>$ \&}]{bucket\+\_\+counts}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Calculate cumulative counts for histogram buckets. 
+
+Calculates cumulative counts for histogram buckets.
+
+
+\begin{DoxyParams}{Parameters}
+{\em bucket\+\_\+counts} & Per-\/bucket counts. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Cumulative counts vector. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a42e9622377be69bc292afc55171ef02d}\index{IoTMetricsServer@{IoTMetricsServer}!createAttributeKey@{createAttributeKey}}
+\index{createAttributeKey@{createAttributeKey}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{createAttributeKey()}{createAttributeKey()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a42e9622377be69bc292afc55171ef02d} 
+std\+::string Io\+TMetrics\+Server\+::create\+Attribute\+Key (\begin{DoxyParamCaption}\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Create a unique key from metric attributes for storage. 
+
+Creates a unique key from metric attributes for storage.
+
+
+\begin{DoxyParams}{Parameters}
+{\em attributes} & Key-\/value attributes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Concatenated attribute key. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a4d089ec1ba158dc4b56ea76d6be22fb0}\index{IoTMetricsServer@{IoTMetricsServer}!createErrorResponse@{createErrorResponse}}
+\index{createErrorResponse@{createErrorResponse}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{createErrorResponse()}{createErrorResponse()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a4d089ec1ba158dc4b56ea76d6be22fb0} 
+nlohmann\+::json Io\+TMetrics\+Server\+::create\+Error\+Response (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{error}{, }\item[{int}]{code}{ = {\ttfamily 400}}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Create a JSON error response. 
+
+Creates a JSON error response.
+
+
+\begin{DoxyParams}{Parameters}
+{\em error} & Error message. \\
+\hline
+{\em code} & HTTP error code (default\+: 400). \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+JSON error response. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a6592f1807c069f649a0a248f10eb6158}\index{IoTMetricsServer@{IoTMetricsServer}!createSuccessResponse@{createSuccessResponse}}
+\index{createSuccessResponse@{createSuccessResponse}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{createSuccessResponse()}{createSuccessResponse()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a6592f1807c069f649a0a248f10eb6158} 
+nlohmann\+::json Io\+TMetrics\+Server\+::create\+Success\+Response (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{message}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Create a JSON success response. 
+
+Creates a JSON success response.
+
+
+\begin{DoxyParams}{Parameters}
+{\em message} & Success message. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+JSON success response. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_ac6f0f43054f51f796194ecf71d757ba2}\index{IoTMetricsServer@{IoTMetricsServer}!findBucketIndex@{findBucketIndex}}
+\index{findBucketIndex@{findBucketIndex}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{findBucketIndex()}{findBucketIndex()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ac6f0f43054f51f796194ecf71d757ba2} 
+size\+\_\+t Io\+TMetrics\+Server\+::find\+Bucket\+Index (\begin{DoxyParamCaption}\item[{double}]{value}{, }\item[{const std\+::vector$<$ double $>$ \&}]{boundaries}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Find the appropriate histogram bucket index for a value. 
+
+Finds the appropriate histogram bucket index for a value.
+
+
+\begin{DoxyParams}{Parameters}
+{\em value} & Value to bucket. \\
+\hline
+{\em boundaries} & Histogram bucket boundaries. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Index of the bucket. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a62901f052fd050a768e442f8197034cb}\index{IoTMetricsServer@{IoTMetricsServer}!formatAttributes@{formatAttributes}}
+\index{formatAttributes@{formatAttributes}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatAttributes()}{formatAttributes()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a62901f052fd050a768e442f8197034cb} 
+std\+::string Io\+TMetrics\+Server\+::format\+Attributes (\begin{DoxyParamCaption}\item[{const metrics\+\_\+sdk\+::\+Point\+Attributes \&}]{attributes}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format metric attributes for Prometheus. 
+
+Formats metric attributes for Prometheus.
+
+
+\begin{DoxyParams}{Parameters}
+{\em attributes} & Point attributes. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prometheus-\/formatted attribute string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a8df6002e7c1a55a60f2940dcdd15137a}\index{IoTMetricsServer@{IoTMetricsServer}!formatCounterForPrometheus@{formatCounterForPrometheus}}
+\index{formatCounterForPrometheus@{formatCounterForPrometheus}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatCounterForPrometheus()}{formatCounterForPrometheus()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a8df6002e7c1a55a60f2940dcdd15137a} 
+std\+::string Io\+TMetrics\+Server\+::format\+Counter\+For\+Prometheus (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const metrics\+\_\+sdk\+::\+Metric\+Data \&}]{metric\+\_\+data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format a Counter metric for Prometheus. 
+
+Formats a Counter metric for Prometheus.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em metric\+\_\+data} & Metric data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prometheus-\/formatted string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_aed472c93711850c9bb3ef26384f015b2}\index{IoTMetricsServer@{IoTMetricsServer}!formatGaugeForPrometheus@{formatGaugeForPrometheus}}
+\index{formatGaugeForPrometheus@{formatGaugeForPrometheus}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatGaugeForPrometheus()}{formatGaugeForPrometheus()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_aed472c93711850c9bb3ef26384f015b2} 
+std\+::string Io\+TMetrics\+Server\+::format\+Gauge\+For\+Prometheus (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const metrics\+\_\+sdk\+::\+Metric\+Data \&}]{metric\+\_\+data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format a Gauge metric for Prometheus. 
+
+Formats a Gauge metric for Prometheus.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em metric\+\_\+data} & Metric data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prometheus-\/formatted string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a75c738003d751d3ae24e60b561cd184a}\index{IoTMetricsServer@{IoTMetricsServer}!formatHistogramForPrometheus@{formatHistogramForPrometheus}}
+\index{formatHistogramForPrometheus@{formatHistogramForPrometheus}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatHistogramForPrometheus()}{formatHistogramForPrometheus()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a75c738003d751d3ae24e60b561cd184a} 
+std\+::string Io\+TMetrics\+Server\+::format\+Histogram\+For\+Prometheus (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const metrics\+\_\+sdk\+::\+Metric\+Data \&}]{metric\+\_\+data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format a Histogram metric for Prometheus. 
+
+Formats a Histogram metric for Prometheus.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em metric\+\_\+data} & Metric data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prometheus-\/formatted string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a1e6806e5f080d67ff04ce4f6c729cb5b}\index{IoTMetricsServer@{IoTMetricsServer}!formatPrometheusMetrics@{formatPrometheusMetrics}}
+\index{formatPrometheusMetrics@{formatPrometheusMetrics}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatPrometheusMetrics()}{formatPrometheusMetrics()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a1e6806e5f080d67ff04ce4f6c729cb5b} 
+std\+::string Io\+TMetrics\+Server\+::format\+Prometheus\+Metrics (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format all metrics for Prometheus exposition. 
+
+Formats all metrics for Prometheus exposition.
+
+\begin{DoxyReturn}{Returns}
+Formatted Prometheus metrics as a string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a1c1f701db249dd732d1b911b786b84db}\index{IoTMetricsServer@{IoTMetricsServer}!formatUpDownCounterForPrometheus@{formatUpDownCounterForPrometheus}}
+\index{formatUpDownCounterForPrometheus@{formatUpDownCounterForPrometheus}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{formatUpDownCounterForPrometheus()}{formatUpDownCounterForPrometheus()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a1c1f701db249dd732d1b911b786b84db} 
+std\+::string Io\+TMetrics\+Server\+::format\+Up\+Down\+Counter\+For\+Prometheus (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{const metrics\+\_\+sdk\+::\+Metric\+Data \&}]{metric\+\_\+data}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Format an Up\+Down\+Counter metric for Prometheus. 
+
+Formats an Up\+Down\+Counter metric for Prometheus.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em metric\+\_\+data} & Metric data. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Prometheus-\/formatted string. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_ab7f7f6ca5a846272cdb0757db68bb823}\index{IoTMetricsServer@{IoTMetricsServer}!handleHealth@{handleHealth}}
+\index{handleHealth@{handleHealth}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{handleHealth()}{handleHealth()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ab7f7f6ca5a846272cdb0757db68bb823} 
+void Io\+TMetrics\+Server\+::handle\+Health (\begin{DoxyParamCaption}\item[{const httplib\+::\+Request \&}]{req}{, }\item[{httplib\+::\+Response \&}]{res}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle health check endpoint (/health). 
+
+Handles health check requests to /health.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The HTTP request. \\
+\hline
+{\em res} & The HTTP response. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a44d00a83874de8e8ce90b73f682fa3ba}\index{IoTMetricsServer@{IoTMetricsServer}!handleMetric@{handleMetric}}
+\index{handleMetric@{handleMetric}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{handleMetric()}{handleMetric()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a44d00a83874de8e8ce90b73f682fa3ba} 
+void Io\+TMetrics\+Server\+::handle\+Metric (\begin{DoxyParamCaption}\item[{const httplib\+::\+Request \&}]{req}{, }\item[{httplib\+::\+Response \&}]{res}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle metric submission endpoint (/api/metrics). 
+
+Handles metric submission requests to /api/metrics.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The HTTP request. \\
+\hline
+{\em res} & The HTTP response. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a190b7738f01c86adf254722b4221881f}\index{IoTMetricsServer@{IoTMetricsServer}!handleMetricsList@{handleMetricsList}}
+\index{handleMetricsList@{handleMetricsList}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{handleMetricsList()}{handleMetricsList()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a190b7738f01c86adf254722b4221881f} 
+void Io\+TMetrics\+Server\+::handle\+Metrics\+List (\begin{DoxyParamCaption}\item[{const httplib\+::\+Request \&}]{req}{, }\item[{httplib\+::\+Response \&}]{res}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle metrics list endpoint (/api/metrics/list). 
+
+Handles requests to list all registered metrics at /api/metrics/list.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The HTTP request. \\
+\hline
+{\em res} & The HTTP response. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a8be8e1f100d79b46479e48092d8eb1d6}\index{IoTMetricsServer@{IoTMetricsServer}!handlePrometheusMetrics@{handlePrometheusMetrics}}
+\index{handlePrometheusMetrics@{handlePrometheusMetrics}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{handlePrometheusMetrics()}{handlePrometheusMetrics()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a8be8e1f100d79b46479e48092d8eb1d6} 
+void Io\+TMetrics\+Server\+::handle\+Prometheus\+Metrics (\begin{DoxyParamCaption}\item[{const httplib\+::\+Request \&}]{req}{, }\item[{httplib\+::\+Response \&}]{res}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle the /metrics endpoint for custom Prometheus export. 
+
+Handles requests to the custom Prometheus metrics endpoint (/metrics).
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The HTTP request. \\
+\hline
+{\em res} & The HTTP response. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_ae42fdc76641698d08287a5690e524698}\index{IoTMetricsServer@{IoTMetricsServer}!handleStatus@{handleStatus}}
+\index{handleStatus@{handleStatus}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{handleStatus()}{handleStatus()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ae42fdc76641698d08287a5690e524698} 
+void Io\+TMetrics\+Server\+::handle\+Status (\begin{DoxyParamCaption}\item[{const httplib\+::\+Request \&}]{req}{, }\item[{httplib\+::\+Response \&}]{res}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Handle status endpoint (/api/status). 
+
+Handles status requests to /api/status.
+
+
+\begin{DoxyParams}{Parameters}
+{\em req} & The HTTP request. \\
+\hline
+{\em res} & The HTTP response. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_afcc3abd7f6593a4dd5ced8e5d9c0ecef}\index{IoTMetricsServer@{IoTMetricsServer}!initializeMetrics@{initializeMetrics}}
+\index{initializeMetrics@{initializeMetrics}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{initializeMetrics()}{initializeMetrics()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_afcc3abd7f6593a4dd5ced8e5d9c0ecef} 
+void Io\+TMetrics\+Server\+::initialize\+Metrics (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Initialize Open\+Telemetry metrics and exporters. 
+
+Initializes the Open\+Telemetry metrics system and Prometheus exporter. \Hypertarget{class_io_t_metrics_server_af41f9d99f24d8fc999f454e8ffaaeae8}\index{IoTMetricsServer@{IoTMetricsServer}!recordCounterMetricData@{recordCounterMetricData}}
+\index{recordCounterMetricData@{recordCounterMetricData}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{recordCounterMetricData()}{recordCounterMetricData()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_af41f9d99f24d8fc999f454e8ffaaeae8} 
+void Io\+TMetrics\+Server\+::record\+Counter\+Metric\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{double}]{value}{, }\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{, }\item[{const std\+::string \&}]{unit}{, }\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Record a Counter metric. 
+
+Records a Counter metric.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em value} & Value to record. \\
+\hline
+{\em attributes} & Key-\/value attributes. \\
+\hline
+{\em unit} & Unit of measurement. \\
+\hline
+{\em description} & Metric description. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a5f27a29f494ea61e1f2be5237de81d1c}\index{IoTMetricsServer@{IoTMetricsServer}!recordGaugeMetricData@{recordGaugeMetricData}}
+\index{recordGaugeMetricData@{recordGaugeMetricData}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{recordGaugeMetricData()}{recordGaugeMetricData()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a5f27a29f494ea61e1f2be5237de81d1c} 
+void Io\+TMetrics\+Server\+::record\+Gauge\+Metric\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{double}]{value}{, }\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{, }\item[{const std\+::string \&}]{unit}{, }\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Record a Gauge metric. 
+
+Records a Gauge metric.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em value} & Value to record. \\
+\hline
+{\em attributes} & Key-\/value attributes. \\
+\hline
+{\em unit} & Unit of measurement. \\
+\hline
+{\em description} & Metric description. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a5e5ae2c82eeb2d328738826b98f18202}\index{IoTMetricsServer@{IoTMetricsServer}!recordHistogramMetricData@{recordHistogramMetricData}}
+\index{recordHistogramMetricData@{recordHistogramMetricData}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{recordHistogramMetricData()}{recordHistogramMetricData()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a5e5ae2c82eeb2d328738826b98f18202} 
+void Io\+TMetrics\+Server\+::record\+Histogram\+Metric\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{double}]{value}{, }\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{, }\item[{const std\+::string \&}]{unit}{, }\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Record a Histogram metric. 
+
+Records a Histogram metric.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em value} & Value to record. \\
+\hline
+{\em attributes} & Key-\/value attributes. \\
+\hline
+{\em unit} & Unit of measurement. \\
+\hline
+{\em description} & Metric description. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_ac8b9c8f9fa3a63fe9ca2641e3495896f}\index{IoTMetricsServer@{IoTMetricsServer}!recordMetric@{recordMetric}}
+\index{recordMetric@{recordMetric}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{recordMetric()}{recordMetric()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ac8b9c8f9fa3a63fe9ca2641e3495896f} 
+void Io\+TMetrics\+Server\+::record\+Metric (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{metric\+\_\+name}{, }\item[{const std\+::string \&}]{instrument\+\_\+type}{, }\item[{double}]{value}{, }\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{, }\item[{const std\+::string \&}]{unit}{, }\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Record a metric of any supported type. 
+
+Records a metric of any supported type.
+
+
+\begin{DoxyParams}{Parameters}
+{\em metric\+\_\+name} & Name of the metric. \\
+\hline
+{\em instrument\+\_\+type} & Type of instrument ("{}counter"{}, "{}updowncounter"{}, "{}histogram"{}, "{}gauge"{}). \\
+\hline
+{\em value} & Value to record. \\
+\hline
+{\em attributes} & Key-\/value attributes for the metric. \\
+\hline
+{\em unit} & Unit of measurement. \\
+\hline
+{\em description} & Metric description. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a1023db6273b3ce2a5c20b4a800df1da4}\index{IoTMetricsServer@{IoTMetricsServer}!recordUpDownCounterMetricData@{recordUpDownCounterMetricData}}
+\index{recordUpDownCounterMetricData@{recordUpDownCounterMetricData}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{recordUpDownCounterMetricData()}{recordUpDownCounterMetricData()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a1023db6273b3ce2a5c20b4a800df1da4} 
+void Io\+TMetrics\+Server\+::record\+Up\+Down\+Counter\+Metric\+Data (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{, }\item[{double}]{value}{, }\item[{const std\+::map$<$ std\+::string, std\+::string $>$ \&}]{attributes}{, }\item[{const std\+::string \&}]{unit}{, }\item[{const std\+::string \&}]{description}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Record an Up\+Down\+Counter metric. 
+
+Records an Up\+Down\+Counter metric.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+{\em value} & Value to record. \\
+\hline
+{\em attributes} & Key-\/value attributes. \\
+\hline
+{\em unit} & Unit of measurement. \\
+\hline
+{\em description} & Metric description. \\
+\hline
+\end{DoxyParams}
+\Hypertarget{class_io_t_metrics_server_a97d9cb5b77602abf4c0fbf7eb4c7061a}\index{IoTMetricsServer@{IoTMetricsServer}!sanitizeMetricName@{sanitizeMetricName}}
+\index{sanitizeMetricName@{sanitizeMetricName}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{sanitizeMetricName()}{sanitizeMetricName()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a97d9cb5b77602abf4c0fbf7eb4c7061a} 
+std\+::string Io\+TMetrics\+Server\+::sanitize\+Metric\+Name (\begin{DoxyParamCaption}\item[{const std\+::string \&}]{name}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Sanitize a metric name for Prometheus compatibility. 
+
+Sanitizes a metric name for Prometheus compatibility.
+
+
+\begin{DoxyParams}{Parameters}
+{\em name} & Metric name. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+Sanitized metric name. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a200f79ff0c805c7b336badc812d6ea7f}\index{IoTMetricsServer@{IoTMetricsServer}!setupRoutes@{setupRoutes}}
+\index{setupRoutes@{setupRoutes}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{setupRoutes()}{setupRoutes()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a200f79ff0c805c7b336badc812d6ea7f} 
+void Io\+TMetrics\+Server\+::setup\+Routes (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Set up HTTP routes and endpoints. 
+
+Sets up all HTTP routes and endpoints for the server. \Hypertarget{class_io_t_metrics_server_a3e85b2021867f498981adf34162f1c5b}\index{IoTMetricsServer@{IoTMetricsServer}!start@{start}}
+\index{start@{start}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{start()}{start()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a3e85b2021867f498981adf34162f1c5b} 
+bool Io\+TMetrics\+Server\+::start (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Start the HTTP server (blocking call). 
+
+Starts the HTTP server (blocking call).
+
+\begin{DoxyReturn}{Returns}
+true if the server started successfully, false otherwise. 
+\end{DoxyReturn}
+\Hypertarget{class_io_t_metrics_server_a52a17a26d4b07219f79f62e5426ddc1f}\index{IoTMetricsServer@{IoTMetricsServer}!stop@{stop}}
+\index{stop@{stop}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{stop()}{stop()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a52a17a26d4b07219f79f62e5426ddc1f} 
+void Io\+TMetrics\+Server\+::stop (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})}
+
+
+
+Stop the HTTP server if running. 
+
+Stops the HTTP server if running. \Hypertarget{class_io_t_metrics_server_a07f1d6e88d4ca77632d3b990d815d1cc}\index{IoTMetricsServer@{IoTMetricsServer}!validateMetricRequest@{validateMetricRequest}}
+\index{validateMetricRequest@{validateMetricRequest}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{validateMetricRequest()}{validateMetricRequest()}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a07f1d6e88d4ca77632d3b990d815d1cc} 
+bool Io\+TMetrics\+Server\+::validate\+Metric\+Request (\begin{DoxyParamCaption}\item[{const nlohmann\+::json \&}]{request}{, }\item[{std\+::string \&}]{error\+\_\+msg}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Validate a metric submission request. 
+
+Validates a metric submission request.
+
+
+\begin{DoxyParams}{Parameters}
+{\em request} & JSON request object. \\
+\hline
+{\em error\+\_\+msg} & Output error message if invalid. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+true if valid, false otherwise. 
+\end{DoxyReturn}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{class_io_t_metrics_server_a78e2269bb12e9d92098759018c885dcc}\index{IoTMetricsServer@{IoTMetricsServer}!counter\_metrics\_@{counter\_metrics\_}}
+\index{counter\_metrics\_@{counter\_metrics\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{counter\_metrics\_}{counter\_metrics\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a78e2269bb12e9d92098759018c885dcc} 
+std\+::map$<$std\+::string, std\+::unique\+\_\+ptr$<$metrics\+\_\+sdk\+::\+Metric\+Data$>$ $>$ Io\+TMetrics\+Server\+::counter\+\_\+metrics\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Storage for Counter metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). 
+
+\Hypertarget{class_io_t_metrics_server_a806399578111863c2f7960788a4e94c5}\index{IoTMetricsServer@{IoTMetricsServer}!default\_histogram\_boundaries\_@{default\_histogram\_boundaries\_}}
+\index{default\_histogram\_boundaries\_@{default\_histogram\_boundaries\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{default\_histogram\_boundaries\_}{default\_histogram\_boundaries\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a806399578111863c2f7960788a4e94c5} 
+const std\+::vector$<$double$>$ Io\+TMetrics\+Server\+::default\+\_\+histogram\+\_\+boundaries\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+{\bfseries Initial value\+:}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{=\ \{}
+\DoxyCodeLine{\ \ \ \ \ \ \ \ 0,\ 5,\ 10,\ 25,\ 50,\ 75,\ 100,\ 250,\ 500,\ 750,\ 1000,\ 2500,\ 5000,\ 7500,\ 10000}
+\DoxyCodeLine{\ \ \ \ \}}
+
+\end{DoxyCode}
+
+
+Default histogram bucket boundaries (Open\+Telemetry spec). 
+
+\Hypertarget{class_io_t_metrics_server_a391aad1a4d1fca283d330ab81de683f4}\index{IoTMetricsServer@{IoTMetricsServer}!gauge\_metrics\_@{gauge\_metrics\_}}
+\index{gauge\_metrics\_@{gauge\_metrics\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{gauge\_metrics\_}{gauge\_metrics\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a391aad1a4d1fca283d330ab81de683f4} 
+std\+::map$<$std\+::string, std\+::unique\+\_\+ptr$<$metrics\+\_\+sdk\+::\+Metric\+Data$>$ $>$ Io\+TMetrics\+Server\+::gauge\+\_\+metrics\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Storage for Gauge metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). 
+
+\Hypertarget{class_io_t_metrics_server_a4c16de232df3d5ce7ad3a373ac1e8666}\index{IoTMetricsServer@{IoTMetricsServer}!histogram\_metrics\_@{histogram\_metrics\_}}
+\index{histogram\_metrics\_@{histogram\_metrics\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{histogram\_metrics\_}{histogram\_metrics\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a4c16de232df3d5ce7ad3a373ac1e8666} 
+std\+::map$<$std\+::string, std\+::unique\+\_\+ptr$<$metrics\+\_\+sdk\+::\+Metric\+Data$>$ $>$ Io\+TMetrics\+Server\+::histogram\+\_\+metrics\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Storage for Histogram metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). 
+
+\Hypertarget{class_io_t_metrics_server_a7011700c4c0d209fb31c4f66bbdb9ff0}\index{IoTMetricsServer@{IoTMetricsServer}!histogram\_states\_@{histogram\_states\_}}
+\index{histogram\_states\_@{histogram\_states\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{histogram\_states\_}{histogram\_states\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a7011700c4c0d209fb31c4f66bbdb9ff0} 
+std\+::map$<$std\+::string, std\+::map$<$std\+::string, \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state}{Histogram\+State}}$>$ $>$ Io\+TMetrics\+Server\+::histogram\+\_\+states\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Histogram state tracking (metric\+\_\+name -\/\texorpdfstring{$>$}{>} attribute\+\_\+key -\/\texorpdfstring{$>$}{>} state). 
+
+\Hypertarget{class_io_t_metrics_server_a253bb9a1f2988cf6966b8268eb0c3431}\index{IoTMetricsServer@{IoTMetricsServer}!http\_server\_@{http\_server\_}}
+\index{http\_server\_@{http\_server\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{http\_server\_}{http\_server\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a253bb9a1f2988cf6966b8268eb0c3431} 
+std\+::unique\+\_\+ptr$<$httplib\+::\+Server$>$ Io\+TMetrics\+Server\+::http\+\_\+server\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Pointer to the HTTP server instance. 
+
+\Hypertarget{class_io_t_metrics_server_ac9957b1e69a964344a616396e76a7f42}\index{IoTMetricsServer@{IoTMetricsServer}!instruments\_mutex\_@{instruments\_mutex\_}}
+\index{instruments\_mutex\_@{instruments\_mutex\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{instruments\_mutex\_}{instruments\_mutex\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ac9957b1e69a964344a616396e76a7f42} 
+std\+::mutex Io\+TMetrics\+Server\+::instruments\+\_\+mutex\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Mutex for protecting instrument registration. 
+
+\Hypertarget{class_io_t_metrics_server_a3084a23bb8eea1d36333500e71774e7a}\index{IoTMetricsServer@{IoTMetricsServer}!meter\_provider\_@{meter\_provider\_}}
+\index{meter\_provider\_@{meter\_provider\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{meter\_provider\_}{meter\_provider\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a3084a23bb8eea1d36333500e71774e7a} 
+std\+::shared\+\_\+ptr$<$metrics\+\_\+api\+::\+Meter\+Provider$>$ Io\+TMetrics\+Server\+::meter\+\_\+provider\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Open\+Telemetry Meter\+Provider. 
+
+\Hypertarget{class_io_t_metrics_server_a53de8b538916659653c44b9ec9893561}\index{IoTMetricsServer@{IoTMetricsServer}!metrics\_mutex\_@{metrics\_mutex\_}}
+\index{metrics\_mutex\_@{metrics\_mutex\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{metrics\_mutex\_}{metrics\_mutex\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a53de8b538916659653c44b9ec9893561} 
+std\+::mutex Io\+TMetrics\+Server\+::metrics\+\_\+mutex\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Mutex for protecting metric data. 
+
+\Hypertarget{class_io_t_metrics_server_ab619bdbccea0982ef17707b6c4246b11}\index{IoTMetricsServer@{IoTMetricsServer}!metrics\_port\_@{metrics\_port\_}}
+\index{metrics\_port\_@{metrics\_port\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{metrics\_port\_}{metrics\_port\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_ab619bdbccea0982ef17707b6c4246b11} 
+int Io\+TMetrics\+Server\+::metrics\+\_\+port\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Prometheus metrics endpoint port. 
+
+\Hypertarget{class_io_t_metrics_server_a35bc2acc9b94618d2359155eb65edf09}\index{IoTMetricsServer@{IoTMetricsServer}!port\_@{port\_}}
+\index{port\_@{port\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{port\_}{port\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a35bc2acc9b94618d2359155eb65edf09} 
+int Io\+TMetrics\+Server\+::port\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+API server port. 
+
+\Hypertarget{class_io_t_metrics_server_aa94f806a102a5188264236b53eb300ec}\index{IoTMetricsServer@{IoTMetricsServer}!server\_running\_@{server\_running\_}}
+\index{server\_running\_@{server\_running\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{server\_running\_}{server\_running\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_aa94f806a102a5188264236b53eb300ec} 
+bool Io\+TMetrics\+Server\+::server\+\_\+running\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Indicates if the server is running. 
+
+\Hypertarget{class_io_t_metrics_server_a794d913394d3c453fea037986d2fe6e5}\index{IoTMetricsServer@{IoTMetricsServer}!updowncounter\_metrics\_@{updowncounter\_metrics\_}}
+\index{updowncounter\_metrics\_@{updowncounter\_metrics\_}!IoTMetricsServer@{IoTMetricsServer}}
+\doxysubsubsection{\texorpdfstring{updowncounter\_metrics\_}{updowncounter\_metrics\_}}
+{\footnotesize\ttfamily \label{class_io_t_metrics_server_a794d913394d3c453fea037986d2fe6e5} 
+std\+::map$<$std\+::string, std\+::unique\+\_\+ptr$<$metrics\+\_\+sdk\+::\+Metric\+Data$>$ $>$ Io\+TMetrics\+Server\+::updowncounter\+\_\+metrics\+\_\+\hspace{0.3cm}{\ttfamily [private]}}
+
+
+
+Storage for Up\+Down\+Counter metrics (name -\/\texorpdfstring{$>$}{>} Metric\+Data). 
+
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_io_t_metrics_server_8h}{Io\+TMetrics\+Server.\+h}}\item 
+\mbox{\hyperlink{_io_t_metrics_server_8cpp}{Io\+TMetrics\+Server.\+cpp}}\end{DoxyCompactItemize}

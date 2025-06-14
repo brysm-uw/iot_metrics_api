@@ -1,0 +1,192 @@
+\doxysection{Io\+TMetrics\+Server.\+h}
+\hypertarget{_io_t_metrics_server_8h_source}{}\label{_io_t_metrics_server_8h_source}\mbox{\hyperlink{_io_t_metrics_server_8h}{Go to the documentation of this file.}}
+\begin{DoxyCode}{0}
+\DoxyCodeLine{00001\ \textcolor{preprocessor}{\#pragma\ once}}
+\DoxyCodeLine{00002\ }
+\DoxyCodeLine{00003\ \textcolor{preprocessor}{\#include\ <memory>}}
+\DoxyCodeLine{00004\ \textcolor{preprocessor}{\#include\ <string>}}
+\DoxyCodeLine{00005\ \textcolor{preprocessor}{\#include\ <map>}}
+\DoxyCodeLine{00006\ \textcolor{preprocessor}{\#include\ <vector>}}
+\DoxyCodeLine{00007\ \textcolor{preprocessor}{\#include\ <mutex>}}
+\DoxyCodeLine{00008\ \textcolor{preprocessor}{\#include\ <limits>}}
+\DoxyCodeLine{00009\ \textcolor{preprocessor}{\#include\ <httplib.h>}}
+\DoxyCodeLine{00010\ \textcolor{preprocessor}{\#include\ <nlohmann/json.hpp>}}
+\DoxyCodeLine{00011\ }
+\DoxyCodeLine{00012\ \textcolor{comment}{//\ OpenTelemetry\ includes}}
+\DoxyCodeLine{00013\ \textcolor{preprocessor}{\#include\ <opentelemetry/sdk/metrics/meter\_provider.h>}}
+\DoxyCodeLine{00014\ \textcolor{preprocessor}{\#include\ <opentelemetry/sdk/metrics/data/metric\_data.h>}}
+\DoxyCodeLine{00015\ \textcolor{preprocessor}{\#include\ <opentelemetry/sdk/metrics/data/point\_data.h>}}
+\DoxyCodeLine{00016\ \textcolor{preprocessor}{\#include\ <opentelemetry/exporters/prometheus/exporter\_factory.h>}}
+\DoxyCodeLine{00017\ \textcolor{preprocessor}{\#include\ <opentelemetry/exporters/prometheus/exporter\_options.h>}}
+\DoxyCodeLine{00018\ \textcolor{preprocessor}{\#include\ <opentelemetry/metrics/provider.h>}}
+\DoxyCodeLine{00019\ }
+\DoxyCodeLine{00021\ \textcolor{keyword}{namespace\ }metrics\_api\ =\ opentelemetry::metrics;}
+\DoxyCodeLine{00022\ \textcolor{keyword}{namespace\ }metrics\_sdk\ =\ opentelemetry::sdk::metrics;}
+\DoxyCodeLine{00023\ \textcolor{keyword}{namespace\ }prometheus\_exporter\ =\ opentelemetry::exporter::metrics;}
+\DoxyCodeLine{00024\ }
+\DoxyCodeLine{00029\ \textcolor{keyword}{class\ }\mbox{\hyperlink{class_io_t_metrics_server_aada48453e7ea44fbac9df4559a7ef0fc}{IoTMetricsServer}}\ \{}
+\DoxyCodeLine{00030\ \textcolor{keyword}{public}:}
+\DoxyCodeLine{00034\ \ \ \ \ \mbox{\hyperlink{class_io_t_metrics_server_aada48453e7ea44fbac9df4559a7ef0fc}{IoTMetricsServer}}(\textcolor{keywordtype}{int}\ port\ =\ 8080,\ \textcolor{keywordtype}{int}\ metrics\_port\ =\ 9090);}
+\DoxyCodeLine{00035\ }
+\DoxyCodeLine{00037\ \ \ \ \ \mbox{\hyperlink{class_io_t_metrics_server_a848dcdc7b2e4644a5a9f50465e10d857}{\string~IoTMetricsServer}}();}
+\DoxyCodeLine{00038\ }
+\DoxyCodeLine{00041\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_io_t_metrics_server_a3e85b2021867f498981adf34162f1c5b}{start}}();}
+\DoxyCodeLine{00042\ }
+\DoxyCodeLine{00044\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a52a17a26d4b07219f79f62e5426ddc1f}{stop}}();}
+\DoxyCodeLine{00045\ }
+\DoxyCodeLine{00046\ \textcolor{keyword}{private}:}
+\DoxyCodeLine{00047\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00048\ \ \ \ \ \textcolor{comment}{//\ MEMBER\ VARIABLES}}
+\DoxyCodeLine{00049\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00050\ }
+\DoxyCodeLine{00052\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_io_t_metrics_server_a35bc2acc9b94618d2359155eb65edf09}{port\_}};}
+\DoxyCodeLine{00053\ }
+\DoxyCodeLine{00055\ \ \ \ \ \textcolor{keywordtype}{int}\ \mbox{\hyperlink{class_io_t_metrics_server_ab619bdbccea0982ef17707b6c4246b11}{metrics\_port\_}};}
+\DoxyCodeLine{00056\ }
+\DoxyCodeLine{00058\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_io_t_metrics_server_aa94f806a102a5188264236b53eb300ec}{server\_running\_}};}
+\DoxyCodeLine{00059\ }
+\DoxyCodeLine{00061\ \ \ \ \ std::unique\_ptr<httplib::Server>\ \mbox{\hyperlink{class_io_t_metrics_server_a253bb9a1f2988cf6966b8268eb0c3431}{http\_server\_}};}
+\DoxyCodeLine{00062\ }
+\DoxyCodeLine{00064\ \ \ \ \ std::shared\_ptr<metrics\_api::MeterProvider>\ \mbox{\hyperlink{class_io_t_metrics_server_a3084a23bb8eea1d36333500e71774e7a}{meter\_provider\_}};}
+\DoxyCodeLine{00065\ }
+\DoxyCodeLine{00067\ \ \ \ \ \textcolor{keyword}{const}\ std::vector<double>\ \mbox{\hyperlink{class_io_t_metrics_server_a806399578111863c2f7960788a4e94c5}{default\_histogram\_boundaries\_}}\ =\ \{}
+\DoxyCodeLine{00068\ \ \ \ \ \ \ \ \ 0,\ 5,\ 10,\ 25,\ 50,\ 75,\ 100,\ 250,\ 500,\ 750,\ 1000,\ 2500,\ 5000,\ 7500,\ 10000}
+\DoxyCodeLine{00069\ \ \ \ \ \};}
+\DoxyCodeLine{00070\ }
+\DoxyCodeLine{00071\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00072\ \ \ \ \ \textcolor{comment}{//\ HISTOGRAM\ STATE\ MANAGEMENT}}
+\DoxyCodeLine{00073\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00074\ }
+\DoxyCodeLine{00076\ \ \ \ \ \textcolor{keyword}{struct\ }\mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ae53bb696e09fd2573a2291d657616eb7}{HistogramState}}\ \{}
+\DoxyCodeLine{00078\ \ \ \ \ \ \ \ \ uint64\_t\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a6c72f310b33e62d8228ccb34be36dede}{count}}\ =\ 0;}
+\DoxyCodeLine{00080\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a4a0d5bf530977bffbccc319e10c34db0}{sum}}\ =\ 0.0;}
+\DoxyCodeLine{00082\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a983449e32c753a8322c09e455acc0afb}{min}}\ =\ std::numeric\_limits<double>::max();}
+\DoxyCodeLine{00084\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240}{max}}\ =\ std::numeric\_limits<double>::lowest();}
+\DoxyCodeLine{00086\ \ \ \ \ \ \ \ \ std::vector<uint64\_t>\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ac039ff807fb0b9457dbc3e79b4612e30}{bucket\_counts}};}
+\DoxyCodeLine{00088\ \ \ \ \ \ \ \ \ std::vector<double>\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_addf702e5ffdd64ff7067155edcd10349}{boundaries}};}
+\DoxyCodeLine{00089\ }
+\DoxyCodeLine{00091\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ae53bb696e09fd2573a2291d657616eb7}{HistogramState}}()\ =\ \textcolor{keywordflow}{default};}
+\DoxyCodeLine{00092\ }
+\DoxyCodeLine{00095\ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a91da4c0ca4cce1f6101f08af49a5b150}{HistogramState}}(\textcolor{keyword}{const}\ std::vector<double>\&\ bounds)\ :\ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_addf702e5ffdd64ff7067155edcd10349}{boundaries}}(bounds)\ \{}
+\DoxyCodeLine{00096\ \ \ \ \ \ \ \ \ \ \ \ \ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ac039ff807fb0b9457dbc3e79b4612e30}{bucket\_counts}}.resize(bounds.size()\ +\ 1,\ 0);}
+\DoxyCodeLine{00097\ \ \ \ \ \ \ \ \ \}}
+\DoxyCodeLine{00098\ \ \ \ \ \};}
+\DoxyCodeLine{00099\ }
+\DoxyCodeLine{00100\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00101\ \ \ \ \ \textcolor{comment}{//\ METRIC\ STORAGE}}
+\DoxyCodeLine{00102\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00103\ }
+\DoxyCodeLine{00105\ \ \ \ \ std::map<std::string,\ std::unique\_ptr<metrics\_sdk::MetricData>>\ \mbox{\hyperlink{class_io_t_metrics_server_a78e2269bb12e9d92098759018c885dcc}{counter\_metrics\_}};}
+\DoxyCodeLine{00107\ \ \ \ \ std::map<std::string,\ std::unique\_ptr<metrics\_sdk::MetricData>>\ \mbox{\hyperlink{class_io_t_metrics_server_a794d913394d3c453fea037986d2fe6e5}{updowncounter\_metrics\_}};}
+\DoxyCodeLine{00109\ \ \ \ \ std::map<std::string,\ std::unique\_ptr<metrics\_sdk::MetricData>>\ \mbox{\hyperlink{class_io_t_metrics_server_a4c16de232df3d5ce7ad3a373ac1e8666}{histogram\_metrics\_}};}
+\DoxyCodeLine{00111\ \ \ \ \ std::map<std::string,\ std::unique\_ptr<metrics\_sdk::MetricData>>\ \mbox{\hyperlink{class_io_t_metrics_server_a391aad1a4d1fca283d330ab81de683f4}{gauge\_metrics\_}};}
+\DoxyCodeLine{00113\ \ \ \ \ std::map<std::string,\ std::map<std::string,\ HistogramState>>\ \mbox{\hyperlink{class_io_t_metrics_server_a7011700c4c0d209fb31c4f66bbdb9ff0}{histogram\_states\_}};}
+\DoxyCodeLine{00114\ }
+\DoxyCodeLine{00115\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00116\ \ \ \ \ \textcolor{comment}{//\ CUSTOM\ PROMETHEUS\ EXPORT\ METHODS}}
+\DoxyCodeLine{00117\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00118\ }
+\DoxyCodeLine{00120\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a8be8e1f100d79b46479e48092d8eb1d6}{handlePrometheusMetrics}}(\textcolor{keyword}{const}\ httplib::Request\&\ req,\ httplib::Response\&\ res);}
+\DoxyCodeLine{00121\ }
+\DoxyCodeLine{00124\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a1e6806e5f080d67ff04ce4f6c729cb5b}{formatPrometheusMetrics}}();}
+\DoxyCodeLine{00125\ }
+\DoxyCodeLine{00130\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a8df6002e7c1a55a60f2940dcdd15137a}{formatCounterForPrometheus}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00131\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ metrics\_sdk::MetricData\&\ metric\_data);}
+\DoxyCodeLine{00132\ }
+\DoxyCodeLine{00137\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a1c1f701db249dd732d1b911b786b84db}{formatUpDownCounterForPrometheus}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00138\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ metrics\_sdk::MetricData\&\ metric\_data);}
+\DoxyCodeLine{00139\ }
+\DoxyCodeLine{00144\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a75c738003d751d3ae24e60b561cd184a}{formatHistogramForPrometheus}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00145\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ metrics\_sdk::MetricData\&\ metric\_data);}
+\DoxyCodeLine{00146\ }
+\DoxyCodeLine{00151\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_aed472c93711850c9bb3ef26384f015b2}{formatGaugeForPrometheus}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00152\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ metrics\_sdk::MetricData\&\ metric\_data);}
+\DoxyCodeLine{00153\ }
+\DoxyCodeLine{00157\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a62901f052fd050a768e442f8197034cb}{formatAttributes}}(\textcolor{keyword}{const}\ metrics\_sdk::PointAttributes\&\ attributes);}
+\DoxyCodeLine{00158\ }
+\DoxyCodeLine{00162\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a97d9cb5b77602abf4c0fbf7eb4c7061a}{sanitizeMetricName}}(\textcolor{keyword}{const}\ std::string\&\ name);}
+\DoxyCodeLine{00163\ }
+\DoxyCodeLine{00164\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00165\ \ \ \ \ \textcolor{comment}{//\ THREAD\ SAFETY}}
+\DoxyCodeLine{00166\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00167\ }
+\DoxyCodeLine{00169\ \ \ \ \ std::mutex\ \mbox{\hyperlink{class_io_t_metrics_server_a53de8b538916659653c44b9ec9893561}{metrics\_mutex\_}};}
+\DoxyCodeLine{00171\ \ \ \ \ std::mutex\ \mbox{\hyperlink{class_io_t_metrics_server_ac9957b1e69a964344a616396e76a7f42}{instruments\_mutex\_}};}
+\DoxyCodeLine{00172\ }
+\DoxyCodeLine{00173\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00174\ \ \ \ \ \textcolor{comment}{//\ INITIALIZATION\ METHODS}}
+\DoxyCodeLine{00175\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00176\ }
+\DoxyCodeLine{00178\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_afcc3abd7f6593a4dd5ced8e5d9c0ecef}{initializeMetrics}}();}
+\DoxyCodeLine{00179\ }
+\DoxyCodeLine{00181\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a200f79ff0c805c7b336badc812d6ea7f}{setupRoutes}}();}
+\DoxyCodeLine{00182\ }
+\DoxyCodeLine{00183\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00184\ \ \ \ \ \textcolor{comment}{//\ HTTP\ ENDPOINT\ HANDLERS}}
+\DoxyCodeLine{00185\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00186\ }
+\DoxyCodeLine{00188\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a44d00a83874de8e8ce90b73f682fa3ba}{handleMetric}}(\textcolor{keyword}{const}\ httplib::Request\&\ req,\ httplib::Response\&\ res);}
+\DoxyCodeLine{00189\ }
+\DoxyCodeLine{00191\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_ab7f7f6ca5a846272cdb0757db68bb823}{handleHealth}}(\textcolor{keyword}{const}\ httplib::Request\&\ req,\ httplib::Response\&\ res);}
+\DoxyCodeLine{00192\ }
+\DoxyCodeLine{00194\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_ae42fdc76641698d08287a5690e524698}{handleStatus}}(\textcolor{keyword}{const}\ httplib::Request\&\ req,\ httplib::Response\&\ res);}
+\DoxyCodeLine{00195\ }
+\DoxyCodeLine{00197\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a190b7738f01c86adf254722b4221881f}{handleMetricsList}}(\textcolor{keyword}{const}\ httplib::Request\&\ req,\ httplib::Response\&\ res);}
+\DoxyCodeLine{00198\ }
+\DoxyCodeLine{00199\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00200\ \ \ \ \ \textcolor{comment}{//\ METRIC\ RECORDING\ METHODS}}
+\DoxyCodeLine{00201\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00202\ }
+\DoxyCodeLine{00210\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_ac8b9c8f9fa3a63fe9ca2641e3495896f}{recordMetric}}(\textcolor{keyword}{const}\ std::string\&\ metric\_name,}
+\DoxyCodeLine{00211\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ instrument\_type,}
+\DoxyCodeLine{00212\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value,}
+\DoxyCodeLine{00213\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes,}
+\DoxyCodeLine{00214\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ unit,}
+\DoxyCodeLine{00215\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ description);}
+\DoxyCodeLine{00216\ }
+\DoxyCodeLine{00218\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_af41f9d99f24d8fc999f454e8ffaaeae8}{recordCounterMetricData}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00219\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value,}
+\DoxyCodeLine{00220\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes,}
+\DoxyCodeLine{00221\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ unit,}
+\DoxyCodeLine{00222\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ description);}
+\DoxyCodeLine{00223\ }
+\DoxyCodeLine{00225\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a1023db6273b3ce2a5c20b4a800df1da4}{recordUpDownCounterMetricData}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00226\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value,}
+\DoxyCodeLine{00227\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes,}
+\DoxyCodeLine{00228\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ unit,}
+\DoxyCodeLine{00229\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ description);}
+\DoxyCodeLine{00230\ }
+\DoxyCodeLine{00232\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a5e5ae2c82eeb2d328738826b98f18202}{recordHistogramMetricData}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00233\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value,}
+\DoxyCodeLine{00234\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes,}
+\DoxyCodeLine{00235\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ unit,}
+\DoxyCodeLine{00236\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ description);}
+\DoxyCodeLine{00237\ }
+\DoxyCodeLine{00239\ \ \ \ \ \textcolor{keywordtype}{void}\ \mbox{\hyperlink{class_io_t_metrics_server_a5f27a29f494ea61e1f2be5237de81d1c}{recordGaugeMetricData}}(\textcolor{keyword}{const}\ std::string\&\ name,}
+\DoxyCodeLine{00240\ \ \ \ \ \ \ \ \ \textcolor{keywordtype}{double}\ value,}
+\DoxyCodeLine{00241\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes,}
+\DoxyCodeLine{00242\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ unit,}
+\DoxyCodeLine{00243\ \ \ \ \ \ \ \ \ \textcolor{keyword}{const}\ std::string\&\ description);}
+\DoxyCodeLine{00244\ }
+\DoxyCodeLine{00245\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00246\ \ \ \ \ \textcolor{comment}{//\ HELPER\ METHODS}}
+\DoxyCodeLine{00247\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00248\ }
+\DoxyCodeLine{00252\ \ \ \ \ std::string\ \mbox{\hyperlink{class_io_t_metrics_server_a42e9622377be69bc292afc55171ef02d}{createAttributeKey}}(\textcolor{keyword}{const}\ std::map<std::string,\ std::string>\&\ attributes);}
+\DoxyCodeLine{00253\ }
+\DoxyCodeLine{00258\ \ \ \ \ \textcolor{keywordtype}{size\_t}\ \mbox{\hyperlink{class_io_t_metrics_server_ac6f0f43054f51f796194ecf71d757ba2}{findBucketIndex}}(\textcolor{keywordtype}{double}\ value,\ \textcolor{keyword}{const}\ std::vector<double>\&\ boundaries);}
+\DoxyCodeLine{00259\ }
+\DoxyCodeLine{00263\ \ \ \ \ std::vector<uint64\_t>\ \mbox{\hyperlink{class_io_t_metrics_server_ab4601c1fb35f78ae7579c47ffcddd96e}{calculateCumulativeCounts}}(\textcolor{keyword}{const}\ std::vector<uint64\_t>\&\ bucket\_counts);}
+\DoxyCodeLine{00264\ }
+\DoxyCodeLine{00265\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00266\ \ \ \ \ \textcolor{comment}{//\ UTILITY\ METHODS}}
+\DoxyCodeLine{00267\ \ \ \ \ \textcolor{comment}{//==============================================================================}}
+\DoxyCodeLine{00268\ }
+\DoxyCodeLine{00273\ \ \ \ \ \textcolor{keywordtype}{bool}\ \mbox{\hyperlink{class_io_t_metrics_server_a07f1d6e88d4ca77632d3b990d815d1cc}{validateMetricRequest}}(\textcolor{keyword}{const}\ nlohmann::json\&\ request,\ std::string\&\ error\_msg);}
+\DoxyCodeLine{00274\ }
+\DoxyCodeLine{00279\ \ \ \ \ nlohmann::json\ \mbox{\hyperlink{class_io_t_metrics_server_a4d089ec1ba158dc4b56ea76d6be22fb0}{createErrorResponse}}(\textcolor{keyword}{const}\ std::string\&\ error,\ \textcolor{keywordtype}{int}\ code\ =\ 400);}
+\DoxyCodeLine{00280\ }
+\DoxyCodeLine{00284\ \ \ \ \ nlohmann::json\ \mbox{\hyperlink{class_io_t_metrics_server_a6592f1807c069f649a0a248f10eb6158}{createSuccessResponse}}(\textcolor{keyword}{const}\ std::string\&\ message);}
+\DoxyCodeLine{00285\ \};}
+
+\end{DoxyCode}

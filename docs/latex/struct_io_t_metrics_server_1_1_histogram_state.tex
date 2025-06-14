@@ -1,0 +1,128 @@
+\doxysection{Io\+TMetrics\+Server\+::Histogram\+State Struct Reference}
+\hypertarget{struct_io_t_metrics_server_1_1_histogram_state}{}\label{struct_io_t_metrics_server_1_1_histogram_state}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+
+
+Tracks the state of a histogram for a given metric and attribute set.  
+
+
+\doxysubsubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ae53bb696e09fd2573a2291d657616eb7}{Histogram\+State}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a91da4c0ca4cce1f6101f08af49a5b150}{Histogram\+State}} (const std\+::vector$<$ double $>$ \&bounds)
+\begin{DoxyCompactList}\small\item\em Construct with custom bucket boundaries. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+uint64\+\_\+t \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a6c72f310b33e62d8228ccb34be36dede}{count}} = 0
+\begin{DoxyCompactList}\small\item\em Total number of recorded values. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a4a0d5bf530977bffbccc319e10c34db0}{sum}} = 0.\+0
+\begin{DoxyCompactList}\small\item\em Sum of all recorded values. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a983449e32c753a8322c09e455acc0afb}{min}} = std\+::numeric\+\_\+limits$<$double$>$\mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240}{\+::max}}()
+\begin{DoxyCompactList}\small\item\em Minimum recorded value. \end{DoxyCompactList}\item 
+double \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240}{max}} = std\+::numeric\+\_\+limits$<$double$>$\+::lowest()
+\begin{DoxyCompactList}\small\item\em Maximum recorded value. \end{DoxyCompactList}\item 
+std\+::vector$<$ uint64\+\_\+t $>$ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_ac039ff807fb0b9457dbc3e79b4612e30}{bucket\+\_\+counts}}
+\begin{DoxyCompactList}\small\item\em Counts for each histogram bucket. \end{DoxyCompactList}\item 
+std\+::vector$<$ double $>$ \mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_addf702e5ffdd64ff7067155edcd10349}{boundaries}}
+\begin{DoxyCompactList}\small\item\em Histogram bucket boundaries. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Tracks the state of a histogram for a given metric and attribute set. 
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_ae53bb696e09fd2573a2291d657616eb7}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!HistogramState@{HistogramState}}
+\index{HistogramState@{HistogramState}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{HistogramState()}{HistogramState()}\hspace{0.1cm}{\footnotesize\ttfamily [1/2]}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_ae53bb696e09fd2573a2291d657616eb7} 
+Io\+TMetrics\+Server\+::\+Histogram\+State\+::\+Histogram\+State (\begin{DoxyParamCaption}{}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+
+
+Default constructor. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_a91da4c0ca4cce1f6101f08af49a5b150}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!HistogramState@{HistogramState}}
+\index{HistogramState@{HistogramState}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{HistogramState()}{HistogramState()}\hspace{0.1cm}{\footnotesize\ttfamily [2/2]}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_a91da4c0ca4cce1f6101f08af49a5b150} 
+Io\+TMetrics\+Server\+::\+Histogram\+State\+::\+Histogram\+State (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ double $>$ \&}]{bounds}{}\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Construct with custom bucket boundaries. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bounds} & The histogram bucket boundaries. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Data Documentation}
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_addf702e5ffdd64ff7067155edcd10349}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!boundaries@{boundaries}}
+\index{boundaries@{boundaries}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{boundaries}{boundaries}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_addf702e5ffdd64ff7067155edcd10349} 
+std\+::vector$<$double$>$ Io\+TMetrics\+Server\+::\+Histogram\+State\+::boundaries}
+
+
+
+Histogram bucket boundaries. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_ac039ff807fb0b9457dbc3e79b4612e30}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!bucket\_counts@{bucket\_counts}}
+\index{bucket\_counts@{bucket\_counts}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{bucket\_counts}{bucket\_counts}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_ac039ff807fb0b9457dbc3e79b4612e30} 
+std\+::vector$<$uint64\+\_\+t$>$ Io\+TMetrics\+Server\+::\+Histogram\+State\+::bucket\+\_\+counts}
+
+
+
+Counts for each histogram bucket. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_a6c72f310b33e62d8228ccb34be36dede}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!count@{count}}
+\index{count@{count}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{count}{count}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_a6c72f310b33e62d8228ccb34be36dede} 
+uint64\+\_\+t Io\+TMetrics\+Server\+::\+Histogram\+State\+::count = 0}
+
+
+
+Total number of recorded values. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!max@{max}}
+\index{max@{max}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{max}{max}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240} 
+double Io\+TMetrics\+Server\+::\+Histogram\+State\+::max = std\+::numeric\+\_\+limits$<$double$>$\+::lowest()}
+
+
+
+Maximum recorded value. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_a983449e32c753a8322c09e455acc0afb}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!min@{min}}
+\index{min@{min}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{min}{min}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_a983449e32c753a8322c09e455acc0afb} 
+double Io\+TMetrics\+Server\+::\+Histogram\+State\+::min = std\+::numeric\+\_\+limits$<$double$>$\mbox{\hyperlink{struct_io_t_metrics_server_1_1_histogram_state_a2214a14fb150917ddfc8b3a1e7f20240}{\+::max}}()}
+
+
+
+Minimum recorded value. 
+
+\Hypertarget{struct_io_t_metrics_server_1_1_histogram_state_a4a0d5bf530977bffbccc319e10c34db0}\index{IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}!sum@{sum}}
+\index{sum@{sum}!IoTMetricsServer::HistogramState@{IoTMetricsServer::HistogramState}}
+\doxysubsubsection{\texorpdfstring{sum}{sum}}
+{\footnotesize\ttfamily \label{struct_io_t_metrics_server_1_1_histogram_state_a4a0d5bf530977bffbccc319e10c34db0} 
+double Io\+TMetrics\+Server\+::\+Histogram\+State\+::sum = 0.\+0}
+
+
+
+Sum of all recorded values. 
+
+
+
+The documentation for this struct was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+\mbox{\hyperlink{_io_t_metrics_server_8h}{Io\+TMetrics\+Server.\+h}}\end{DoxyCompactItemize}
